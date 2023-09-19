@@ -18,9 +18,14 @@ class User(db.Model, SerializerMixin):
     phone_number = db.Column(db.String(10), nullable=False)
     payment_card = db.Column(db.String, nullable=False)
 
-    reviews = db.relationship("Review", back_populates="user")
-    order_history = db.relationship("OrderHistory", back_populates="user")
-    cart_items = db.relationship("CartItem", back_populates="user")
+    serialize_rules = ("-password_hash",)
+
+    reviews = db.relationship("Review", back_populates="users")
+    order_history = db.relationship("OrderHistory", back_populates="users")
+    cart_items = db.relationship("CartItem", back_populates="users")
+
+    def __repr__(self):
+        return f"<User(id={self.id}, username='{self.username}')>"
 
 
 class Product(db.Model, SerializerMixin):
@@ -37,8 +42,13 @@ class Product(db.Model, SerializerMixin):
     image = db.Column(db.String)
     rating = db.Column(db.Float)
 
-    reviews = db.relationship("Review", back_populates="product")
-    cart_items = db.relationship("CartItem", back_populates="product")
+    serialize_rules = ("-reviews",)
+
+    reviews = db.relationship("Review", back_populates="products")
+    cart_items = db.relationship("CartItem", back_populates="products")
+
+    def __repr__(self):
+        return f"<Product(id={self.id}, title='{self.title}')>"
 
 
 class Review(db.Model, SerializerMixin):
@@ -48,11 +58,16 @@ class Review(db.Model, SerializerMixin):
     review_body = db.Column(db.String)
     rating = db.Column(db.Float)
 
+    serialize_rules = ("-user_id",)
+
     product_id = db.Column(db.Integer, db.ForeignKey("products.id"), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
 
     product = db.relationship("Product", back_populates="reviews")
     user = db.relationship("User", back_populates="reviews")
+
+    def __repr__(self):
+        return f"<Review(id={self.id}, rating={self.rating})>"
 
 
 class OrderHistory(db.Model, SerializerMixin):
@@ -65,9 +80,14 @@ class OrderHistory(db.Model, SerializerMixin):
     order_date = db.Column(db.DateTime, onupdate=db.func.now())
     order_status = db.Column(db.Boolean)
 
+    serialize_rules = ("-user_id",)
+
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
 
     user = db.relationship("User", back_populates="order_history")
+
+    def __repr__(self):
+        return f"<OrderHistory(id={self.id}, item_name='{self.item_name}')>"
 
 
 class CartItem(db.Model, SerializerMixin):
@@ -79,8 +99,16 @@ class CartItem(db.Model, SerializerMixin):
     item_name = db.Column(db.String)
     image = db.Column(db.String)
 
+    serialize_rules = (
+        "-user_id",
+        "-product_id",
+    )
+
     product_id = db.Column(db.Integer, db.ForeignKey("products.id"), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
 
     product = db.relationship("Product", back_populates="cart_items")
     user = db.relationship("User", back_populates="cart_items")
+
+    def __repr__(self):
+        return f"<CartItem(id={self.id}, item_name='{self.item_name}')>"

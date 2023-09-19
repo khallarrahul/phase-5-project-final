@@ -1,0 +1,23 @@
+from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy_serializer import SerializerMixin
+from sqlalchemy.orm import validates
+
+from config import db, bcrypt
+
+
+class User(db.Model, SerializerMixin):
+    __tablename__ = "users"
+
+    id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(20), nullable=False)
+    last_name = db.Column(db.String(20), nullable=False)
+    email = db.Column(db.String(50), unique=True, nullable=False)
+    username = db.Column(db.String(20), unique=True, nullable=False)
+    _password_hash = db.Column(db.String(128), nullable=False)
+    address = db.Column(db.String, nullable=False)
+    phone_number = db.Column(db.String(10), nullable=False)
+    payment_card = db.Column(db.String, nullable=False)
+
+    reviews = db.relationship("Review", back_populates="user")
+    order_history = db.relationship("OrderHistory", back_populates="user")
+    cart_items = db.relationship("CartItem", back_populates="user")

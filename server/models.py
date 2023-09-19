@@ -39,3 +39,17 @@ class Product(db.Model, SerializerMixin):
 
     reviews = db.relationship("Review", back_populates="product")
     cart_items = db.relationship("CartItem", back_populates="product")
+
+
+class Review(db.Model, SerializerMixin):
+    __tablename__ = "reviews"
+
+    id = db.Column(db.Integer, primary_key=True)
+    review_body = db.Column(db.String)
+    rating = db.Column(db.Float)
+
+    product_id = db.Column(db.Integer, db.ForeignKey("products.id"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+
+    product = db.relationship("Product", back_populates="reviews")
+    user = db.relationship("User", back_populates="reviews")

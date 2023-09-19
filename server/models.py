@@ -53,3 +53,18 @@ class Review(db.Model, SerializerMixin):
 
     product = db.relationship("Product", back_populates="reviews")
     user = db.relationship("User", back_populates="reviews")
+
+
+class OrderHistory(db.Model, SerializerMixin):
+    __tablename__ = "order_history"
+
+    id = db.Column(db.Integer, primary_key=True)
+    item_name = db.Column(db.String)
+    item_price = db.Column(db.Float)
+    quantity = db.Column(db.Integer)
+    order_date = db.Column(db.DateTime, onupdate=db.func.now())
+    order_status = db.Column(db.Boolean)
+
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+
+    user = db.relationship("User", back_populates="order_history")

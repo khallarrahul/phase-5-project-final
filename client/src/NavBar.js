@@ -1,9 +1,9 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import './NavBar.css'
 
 function NavBar() {
   return (
-  
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container">
         <NavLink className="navbar-brand" to="/">
@@ -49,21 +49,26 @@ function NavBar() {
                 Menu
               </NavLink>
               <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li>
-                  <NavLink className="dropdown-item" to="/">
-                    Home
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink className="dropdown-item" to="/login">
-                    Login
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink className="dropdown-item" to="/signup">
-                    Signup
-                  </NavLink>
-                </li>
+                {/* Conditionally render the Home, Login, and Signup links based on screen size */}
+                {window.innerWidth <= 992 && (
+                  <>
+                    <li>
+                      <NavLink className="dropdown-item" to="/">
+                        Home
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink className="dropdown-item" to="/login">
+                        Login
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink className="dropdown-item" to="/signup">
+                        Signup
+                      </NavLink>
+                    </li>
+                  </>
+                )}
               </ul>
             </li>
           </ul>

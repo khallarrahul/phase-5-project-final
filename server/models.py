@@ -68,3 +68,19 @@ class OrderHistory(db.Model, SerializerMixin):
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
 
     user = db.relationship("User", back_populates="order_history")
+
+
+class CartItem(db.Model, SerializerMixin):
+    __tablename__ = "cart_items"
+
+    id = db.Column(db.Integer, primary_key=True)
+    quantity = db.Column(db.Integer)
+    item_price = db.Column(db.Float)
+    item_name = db.Column(db.String)
+    image = db.Column(db.String)
+
+    product_id = db.Column(db.Integer, db.ForeignKey("products.id"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+
+    product = db.relationship("Product", back_populates="cart_items")
+    user = db.relationship("User", back_populates="cart_items")

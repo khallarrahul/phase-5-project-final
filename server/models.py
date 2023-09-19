@@ -21,3 +21,21 @@ class User(db.Model, SerializerMixin):
     reviews = db.relationship("Review", back_populates="user")
     order_history = db.relationship("OrderHistory", back_populates="user")
     cart_items = db.relationship("CartItem", back_populates="user")
+
+
+class Product(db.Model, SerializerMixin):
+    __tablename__ = "products"
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String)
+    description = db.Column(db.String)
+    price = db.Column(db.Float)
+    discount_percentage = db.Column(db.Float)
+    stock = db.Column(db.Integer)
+    brand = db.Column(db.String)
+    category = db.Column(db.String)
+    image = db.Column(db.String)
+    rating = db.Column(db.Float)
+
+    reviews = db.relationship("Review", back_populates="product")
+    cart_items = db.relationship("CartItem", back_populates="product")

@@ -20,7 +20,7 @@ function NavBar() {
         >
           <span className="navbar-toggler-icon"></span>
         </button>
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+        <div className="navbar navbar-expand-lg navbar-dark bg-dark" id="navbarSupportedContent">
           <ul className="navbar-nav ml-auto mb-2 mb-lg-0">
             <li className="nav-item">
               <NavLink className="nav-link" exact to="/">
@@ -40,7 +40,7 @@ function NavBar() {
             <li className="nav-item dropdown d-lg-none"> {/* Added d-lg-none class */}
               <NavLink
                 className="nav-link dropdown-toggle"
-                to="#"
+                to="/"
                 id="navbarDropdown"
                 role="button"
                 data-bs-toggle="dropdown"

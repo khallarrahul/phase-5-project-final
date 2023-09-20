@@ -70,6 +70,16 @@ function Signup() {
                 onChange={handleChange}
                 required
               />
+              <label htmlFor="payment_card" className="form-label">Payment Card</label>
+              <input
+                type="text"
+                className="form-control"
+                id="payment_card"
+                name="payment_card"
+                value={formData.payment_card}
+                onChange={handleChange}
+                required
+              />
             </div>
           </form>
         </div>

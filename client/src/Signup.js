@@ -50,6 +50,16 @@ function Signup() {
                 onChange={handleChange}
                 required
               />
+               <label htmlFor="address" className="form-label">Home Address</label>
+              <input
+                type="text"
+                className="form-control"
+                id="address"
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+                required
+              />
             </div>
           </form>
         </div>

@@ -100,6 +100,16 @@ function Signup() {
                 onChange={handleChange}
                 required
               />
+              <label htmlFor="_password_hash" className="form-label">Password</label>
+              <input
+                type="text"
+                className="form-control"
+                id="_password_hash"
+                name="_password_hash"
+                value={formData._password_hash}
+                onChange={handleChange}
+                required
+              />
             </div>
           </form>
         </div>

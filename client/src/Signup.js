@@ -80,6 +80,16 @@ function Signup() {
                 onChange={handleChange}
                 required
               />
+              <label htmlFor="email" className="form-label">Email</label>
+              <input
+                type="text"
+                className="form-control"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
             </div>
           </form>
         </div>

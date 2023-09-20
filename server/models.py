@@ -1,13 +1,11 @@
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.orm import validates
-
 from config import db, bcrypt
 
 
 class User(db.Model, SerializerMixin):
     __tablename__ = "users"
-
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(20), nullable=False)
     last_name = db.Column(db.String(20), nullable=False)
@@ -17,12 +15,11 @@ class User(db.Model, SerializerMixin):
     address = db.Column(db.String, nullable=False)
     phone_number = db.Column(db.String(10), nullable=False)
     payment_card = db.Column(db.String, nullable=False)
-
     serialize_rules = ("-password_hash",)
 
-    reviews = db.relationship("Review", back_populates="users")
-    order_history = db.relationship("OrderHistory", back_populates="users")
-    cart_items = db.relationship("CartItem", back_populates="users")
+    reviews = db.relationship("Review", back_populates="user")
+    order_history = db.relationship("OrderHistory", back_populates="user")
+    cart_items = db.relationship("CartItem", back_populates="user")
 
     def __repr__(self):
         return f"<User(id={self.id}, username='{self.username}')>"
@@ -30,7 +27,6 @@ class User(db.Model, SerializerMixin):
 
 class Product(db.Model, SerializerMixin):
     __tablename__ = "products"
-
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String)
     description = db.Column(db.String)
@@ -41,11 +37,10 @@ class Product(db.Model, SerializerMixin):
     category = db.Column(db.String)
     image = db.Column(db.String)
     rating = db.Column(db.Float)
-
     serialize_rules = ("-reviews",)
 
-    reviews = db.relationship("Review", back_populates="products")
-    cart_items = db.relationship("CartItem", back_populates="products")
+    reviews = db.relationship("Review", back_populates="product")
+    cart_items = db.relationship("CartItem", back_populates="product")
 
     def __repr__(self):
         return f"<Product(id={self.id}, title='{self.title}')>"
@@ -53,13 +48,10 @@ class Product(db.Model, SerializerMixin):
 
 class Review(db.Model, SerializerMixin):
     __tablename__ = "reviews"
-
     id = db.Column(db.Integer, primary_key=True)
     review_body = db.Column(db.String)
     rating = db.Column(db.Float)
-
     serialize_rules = ("-user_id",)
-
     product_id = db.Column(db.Integer, db.ForeignKey("products.id"), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
 
@@ -72,16 +64,13 @@ class Review(db.Model, SerializerMixin):
 
 class OrderHistory(db.Model, SerializerMixin):
     __tablename__ = "order_history"
-
     id = db.Column(db.Integer, primary_key=True)
     item_name = db.Column(db.String)
     item_price = db.Column(db.Float)
     quantity = db.Column(db.Integer)
     order_date = db.Column(db.DateTime, onupdate=db.func.now())
     order_status = db.Column(db.Boolean)
-
     serialize_rules = ("-user_id",)
-
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
 
     user = db.relationship("User", back_populates="order_history")
@@ -92,18 +81,12 @@ class OrderHistory(db.Model, SerializerMixin):
 
 class CartItem(db.Model, SerializerMixin):
     __tablename__ = "cart_items"
-
     id = db.Column(db.Integer, primary_key=True)
     quantity = db.Column(db.Integer)
     item_price = db.Column(db.Float)
     item_name = db.Column(db.String)
     image = db.Column(db.String)
-
-    serialize_rules = (
-        "-user_id",
-        "-product_id",
-    )
-
+    serialize_rules = ("-user_id", "-product_id")
     product_id = db.Column(db.Integer, db.ForeignKey("products.id"), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
 

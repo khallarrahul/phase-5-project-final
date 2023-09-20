@@ -60,6 +60,16 @@ function Signup() {
                 onChange={handleChange}
                 required
               />
+              <label htmlFor="phone_number" className="form-label">Phone Number</label>
+              <input
+                type="text"
+                className="form-control"
+                id="phone_number"
+                name="phone_number"
+                value={formData.phone_number}
+                onChange={handleChange}
+                required
+              />
             </div>
           </form>
         </div>

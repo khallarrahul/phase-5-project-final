@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 import './Signup.css'
+import {NavLink} from 'react-router-dom'
 
 function Signup() {
   const [formData, setFormData] = useState({
@@ -13,23 +14,71 @@ function Signup() {
     payment_card: ""
   })
 
-  const handleChange = () => {
-    return 
-  }
+  const [isLoading, setIsLoading] = useState(false)
+  const [isSubmitted, setIsSubmitted] = useState(false)
 
-  const handleSubmit = () => {
-    return
+  const handleChange = (e) => {
+    const {name, value} = e.target
+    setFormData({
+      ...formData, [name]: value
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    setIsLoading(true)
+    fetch('/users',{
+      method:"POST",
+      headers: {
+        'Content-Type': "application/json"
+      },
+      body: JSON.stringify(formData)
+    })
+    .then((response)=> {
+      if (response.status === 201){
+        console.log("Registration Sucessful")
+      } else{
+        console.log('Registration failed')
+      }
+    })
+    .catch((error)=>{
+      console.error('Error', error)
+    })
+    setTimeout(() => {
+      setIsLoading(false); // Set loading state to false
+      setIsSubmitted(true); // Set submission state to true
+      setFormData({
+        // Clear the form fields after submission
+        first_name: "",
+        last_name: "",
+        email: "",
+        username: "",
+        password: "",
+        address: "",
+        phone_number: "",
+        payment_card: ""
+      });
+    }, 2000);
   }
 
   return (
     <div className="container mt-5">
       <div className="row">
-        <h1 className="col-12 col-md-7 col-sm-6">
-          Welcome!
-        </h1>
+        <h1 className="col-12 col-md-7 col-sm-6">Welcome!</h1>
         <div className="col-12 col-md-5 col-sm-6 signup-form">
-          <form onSubmit={handleSubmit}>
-            <div className="mb-3">
+          {isLoading ? (
+            <h1>Loading...</h1>
+          ) : isSubmitted ? (
+            <div>
+              <h1>Thank you for signing up!</h1>
+              <NavLink to='/login'>
+                <button className="btn btn-primary">Login Now</button>
+              </NavLink>
+            </div>
+            
+          ) : (
+            <form onSubmit={handleSubmit}>
+              <div className="mb-3">
             <label htmlFor="first_name" className="form-label">First Name</label>
               <input
                 type="text"
@@ -111,8 +160,11 @@ function Signup() {
                 required
               />
             </div>
-            <button type="submit" className="btn btn-primary">Register</button>
-          </form>
+              <button type="submit" className="btn btn-primary">
+                {isLoading ? 'Registering...' : 'Register'}
+              </button>
+            </form>
+          )}
         </div>
       </div>
     </div>

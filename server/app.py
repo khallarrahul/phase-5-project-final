@@ -1,23 +1,19 @@
-from flask import Flask, make_response, jsonify
+from flask import Flask, jsonify, make_response
+from flask_restful import Resource
+from flask_sqlalchemy import SQLAlchemy  # Import SQLAlchemy
+from models import Product
+from config import app, db, api
 
 
-# Create a function to create and configure the Flask app
-def create_app():
-    app = Flask(__name__)
-
-    # Define a route for "/members"
-    @app.route("/members")
-    def movies():
-        response_dict = {"text": "Movies will go here"}
+class Products(Resource):
+    def get(self):
+        products = Product.query.all()
+        product_list = [product.to_dict() for product in products]
+        response_dict = {"products": product_list}
         return make_response(jsonify(response_dict), 200)
 
-    return app
 
+api.add_resource(Products, "/products")
 
-# Check if the script is executed directly (not imported)
 if __name__ == "__main__":
-    # Create the Flask app using the create_app function
-    app = create_app()
-
-    # Run the app on port 5555
     app.run(port=5555)

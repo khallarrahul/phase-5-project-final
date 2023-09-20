@@ -90,6 +90,16 @@ function Signup() {
                 onChange={handleChange}
                 required
               />
+               <label htmlFor="username" className="form-label">Username</label>
+              <input
+                type="text"
+                className="form-control"
+                id="username"
+                name="username"
+                value={formData.username}
+                onChange={handleChange}
+                required
+              />
             </div>
           </form>
         </div>

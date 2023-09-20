@@ -111,6 +111,7 @@ function Signup() {
                 required
               />
             </div>
+            <button type="submit" className="btn btn-primary">Register</button>
           </form>
         </div>
       </div>

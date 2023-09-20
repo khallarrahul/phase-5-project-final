@@ -27,7 +27,22 @@ function Signup() {
         <h1 className="col-12 col-md-7 col-sm-6">
           Welcome!
         </h1>
-        
+        <div className="col-12 col-md-5 col-sm-6 signup-form">
+          <form onSubmit={handleSubmit}>
+            <div className="mb-3">
+            <label htmlFor="first_name" className="form-label">First Name</label>
+              <input
+                type="text"
+                className="form-control"
+                id="first_name"
+                name="first_name"
+                value={formData.first_name}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

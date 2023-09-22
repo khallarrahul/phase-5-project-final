@@ -24,6 +24,16 @@ class User(db.Model, SerializerMixin):
     def __repr__(self):
         return f"<User(id={self.id}, username='{self.username}')>"
 
+    @validates("phone_number")
+    def validate_phone_number(self, key, phone_number):
+        if len(phone_number) != 10:
+            raise ValueError("Please enter a valid phone number")
+        existing_user = User.query.filter_by(phone_number=phone_number).first()
+        if existing_user and existing_user.id != self.id:
+            raise ValueError("The phone number already exists")
+
+        return phone_number
+
 
 class Product(db.Model, SerializerMixin):
     __tablename__ = "products"

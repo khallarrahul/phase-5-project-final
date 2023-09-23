@@ -82,6 +82,7 @@ function Signup() {
 
   return (
     <div className="container mt-5">
+      <h1>{" "}</h1>
       <div className="row">
         <h1 className="col-12 col-md-7 col-sm-6">Welcome!</h1>
         <div className="col-12 col-md-5 col-sm-6 signup-form">

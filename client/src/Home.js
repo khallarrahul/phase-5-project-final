@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './Home.css'
 
 function Home() {
   const [products, setProducts] = useState([]);
@@ -13,26 +14,30 @@ function Home() {
       });
   }, []);
 
-  const productMapper = products.map((product) => (
-    <li key={product.id}>
-      <h3>{product.title}</h3>
-      <p>{product.description}</p>
-      <img
-        src={product.image}
-        alt={product.title}
-        style={{ width: '300px', height: '200px' }} 
-      />
-      <p>Price: ${product.price}</p>
-      <button className="btn btn-primary">Add to Cart</button>
-    </li>
-  ))
-
   return (
     <div>
       <h1>Choose from our exclusive collection</h1>
-      <ul>
-        {productMapper}
-      </ul>
+      <div className='container py-5'>
+        <h1 className='text-center'>Products</h1>
+        <div className='row row-cols-1 row-cols-md-3 g-4 py-5'>
+          {products.map((product) => (
+            <div className='col' key={product.id}>
+              <div className='card' style={{ width: '18rem' }}>
+                <img src={product.image} className='card-img-top' alt={product.title} style={{'width': '100%', 'height': '100%'}}/>
+                <div className='card-body'>
+                  <h5 className='card-title'>{product.title}</h5>
+                  {/* <p className='card-text'>{product.description}</p> */}
+                  <div className='d-flex justify-content-around mb-5'>
+                    <h3>${product.price}</h3> 
+                    <button className='btn btn-primary'>Add to Cart</button> 
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <h1>FOOTER....................................................................................................</h1>
     </div>
   );
 }

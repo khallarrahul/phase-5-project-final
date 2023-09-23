@@ -1,85 +1,110 @@
-import React, {useState} from 'react'
-import './Signup.css'
-import {NavLink} from 'react-router-dom'
+import React, { useState } from 'react';
+import './Signup.css';
+import { NavLink } from 'react-router-dom';
 
 function Signup() {
   const [formData, setFormData] = useState({
-    first_name: "",
-    last_name: "",
-    email: "",
-    username: "",
-    password: "",
-    address: "",
-    phone_number: "",
-    payment_card: ""
-  })
+    first_name: '',
+    last_name: '',
+    email: '',
+    username: '',
+    password: '',
+    address: '',
+    phone_number: '',
+    payment_card: '',
+  });
 
-  const [isLoading, setIsLoading] = useState(false)
-  const [isSubmitted, setIsSubmitted] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [registrationError, setRegistrationError] = useState(false);
 
   const handleChange = (e) => {
-    const {name, value} = e.target
+    const { name, value } = e.target;
     setFormData({
-      ...formData, [name]: value
+      ...formData,
+      [name]: value,
     });
   };
 
+  const isEmailValid = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email)
+  }
+
   const handleSubmit = (e) => {
-    e.preventDefault()
-    setIsLoading(true)
-    fetch('/users',{
-      method:"POST",
+    e.preventDefault();
+    setIsLoading(true);
+
+    if (!isEmailValid(formData.email)){
+      setRegistrationError(true)
+      setIsLoading(false)
+      return
+    }
+    fetch('/users', {
+      method: 'POST',
       headers: {
-        'Content-Type': "application/json"
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(formData)
+      body: JSON.stringify(formData),
     })
-    .then((response)=> {
-      if (response.status === 201){
-        console.log("Registration Sucessful")
-      } else{
-        console.log('Registration failed')
+    .then((response) => {
+      if (response.status === 201) {
+        setIsSubmitted(true);
+        setRegistrationError(false);
+        console.log('Registration Successful');
+      } else if (response.status === 400) {
+        response.json().then((data) => {
+          console.log(data.error); // Set the error message
+        });
+      } else {
+        setIsSubmitted(false);
+        setRegistrationError(true);
+        console.log('Registration failed');
       }
     })
-    .catch((error)=>{
-      console.error('Error', error)
-    })
+      .catch((error) => {
+        console.error('Error', error);
+      });
     setTimeout(() => {
-      setIsLoading(false); // Set loading state to false
-      setIsSubmitted(true); // Set submission state to true
+      setIsLoading(false);
       setFormData({
-        // Clear the form fields after submission
-        first_name: "",
-        last_name: "",
-        email: "",
-        username: "",
-        password: "",
-        address: "",
-        phone_number: "",
-        payment_card: ""
+        first_name: '',
+        last_name: '',
+        email: '',
+        username: '',
+        password: '',
+        address: '',
+        phone_number: '',
+        payment_card: '',
       });
     }, 2000);
-  }
+  };
 
   return (
     <div className="container mt-5">
       <div className="row">
         <h1 className="col-12 col-md-7 col-sm-6">Welcome!</h1>
         <div className="col-12 col-md-5 col-sm-6 signup-form">
-          {isLoading ? (
-            <h1>Loading...</h1>
-          ) : isSubmitted ? (
+        {isSubmitted && !isLoading ? (
             <div>
               <h1>Thank you for signing up!</h1>
-              <NavLink to='/login'>
+              <NavLink to="/login">
                 <button className="btn btn-primary">Login Now</button>
               </NavLink>
+              <br></br>
             </div>
-            
+          ) : registrationError ? (
+            <div>
+              <h1>Registration failed</h1>
+              {/* Display additional error details or instructions if needed */}
+            </div>
+          ) : null}
+          {isLoading ? (
+            <h1>Loading...</h1>
           ) : (
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
-            <label htmlFor="first_name" className="form-label">First Name</label>
+              <label htmlFor="first_name" className="form-label">First Name</label>
               <input
                 type="text"
                 className="form-control"
@@ -151,7 +176,7 @@ function Signup() {
               />
               <label htmlFor="_password_hash" className="form-label">Password</label>
               <input
-                type="text"
+                type="password"
                 className="form-control"
                 id="_password_hash"
                 name="_password_hash"
@@ -159,16 +184,18 @@ function Signup() {
                 onChange={handleChange}
                 required
               />
-            </div>
+              </div>
               <button type="submit" className="btn btn-primary">
-                {isLoading ? 'Registering...' : 'Register'}
+                {isLoading ? 'Registering...' : 'Register'}  
               </button>
+              <NavLink to='/login' > Already Registered? Login Here</NavLink>
             </form>
           )}
+          
         </div>
       </div>
     </div>
   );
 }
 
-export default Signup
+export default Signup;

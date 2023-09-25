@@ -1,28 +1,58 @@
-import React, { useState } from 'react'
-import { NavLink } from 'react-router-dom';
+import React, { useState } from 'react';
+import { NavLink, useHistory } from 'react-router-dom';
 
 function Login() {
-  const [loginData, setLoginData] = useState()
+  const [loginData, setLoginData] = useState({
+    username: '',
+    password: ''
+  });
 
-  const handleChange = () => {
-    return
-  }
+  const history = useHistory();
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setLoginData({ ...loginData, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch('/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(loginData),
+      });
+
+      if (response.ok) {
+        history.push('/');
+  
+        // Login successful, redirect to a protected route or dashboard
+      } else {
+        // Handle login error, e.g., display an error message
+        console.error('Login failed');
+      }
+    } catch (error) {
+      console.error('Login failed:', error);
+    }
+  };
+
   return (
-    
     <div className='container mt-5'>
-      
       <div className='row'>
         <h1 className='col-12 col-md-7 col-sm-6'>Login</h1>
         <div className="col-sm-6 offset-md-3 offset-sm-1">
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className='mb-3'>
-            <label htmlFor="username" className="form-label">Username</label>
+              <label htmlFor="username" className="form-label">Username</label>
               <input
                 type="text"
                 className="form-control"
                 id="username"
                 name="username"
-                value={loginData}
+                value={loginData.username} // Set value to loginData.username
                 onChange={handleChange}
                 required
               />
@@ -32,7 +62,7 @@ function Login() {
                 className="form-control"
                 id="password"
                 name="password"
-                value={loginData}
+                value={loginData.password} // Set value to loginData.password
                 onChange={handleChange}
                 required
               />
@@ -46,7 +76,7 @@ function Login() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default Login
+export default Login;

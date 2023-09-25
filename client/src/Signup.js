@@ -77,6 +77,7 @@ function Signup() {
         phone_number: '',
         payment_card: '',
       });
+      setRegistrationError(false)
     }, 2000);
   };
 
@@ -97,7 +98,6 @@ function Signup() {
           ) : registrationError ? (
             <div>
               <h1>Registration failed</h1>
-              {/* Display additional error details or instructions if needed */}
             </div>
           ) : null}
           {isLoading ? (

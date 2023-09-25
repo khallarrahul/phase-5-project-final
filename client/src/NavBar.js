@@ -1,8 +1,41 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
+import React, {useState, useEffect} from 'react';
+import { NavLink, useHistory } from 'react-router-dom';
 import './NavBar.css'
 
 function NavBar() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const history = useHistory()
+
+  useEffect(() => {
+    // You should replace this with your actual authentication logic.
+    // For example, make an API request to check the user's session on your server.
+    // If the user is authenticated, setIsAuthenticated(true), otherwise setIsAuthenticated(false).
+  
+    // For demonstration purposes, let's assume the user is authenticated.
+    setIsAuthenticated(true);
+  
+    // Don't forget to add setIsAuthenticated as a dependency if you use it within this block.
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      const response = await fetch('/logout', {
+        method: 'GET',
+      });
+
+      if (response.ok) {
+        // Logout successful, set isAuthenticated to false
+        setIsAuthenticated(false);
+        // Redirect to the home page
+        history.push('/');
+      } else {
+        // Handle logout error, e.g., display an error message
+        console.error('Logout failed');
+      }
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
     <div className="container">
@@ -26,12 +59,20 @@ function NavBar() {
             <NavLink className="nav-link" exact to="/">
               Home
             </NavLink>
-          </li>
-          <li className="nav-item">
-            <NavLink className="nav-link" to="/login">
-              Login
-            </NavLink>
-          </li>
+            </li>
+          {isAuthenticated ? (
+            <li className="nav-item">
+              <NavLink className="nav-link" to="/" onClick={handleLogout}>
+                Logout
+              </NavLink>
+            </li>
+          ) : (
+            <li className="nav-item">
+              <NavLink className="nav-link" to="/login">
+                Login
+              </NavLink>
+            </li>
+          )}
           <li className="nav-item">
             <NavLink className="nav-link" to="/signup">
               Signup

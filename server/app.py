@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, make_response, request
+from flask import Flask, jsonify, make_response, request, session, redirect, url_for
 from flask_restful import Resource
 from flask_sqlalchemy import SQLAlchemy  # Import SQLAlchemy
 from models import Product, User
@@ -154,6 +154,39 @@ def signup():
     except Exception as e:
         # Handle other exceptions here (e.g., database errors)
         return jsonify(error="An error occurred while processing your request"), 500
+
+
+@app.route("/login", methods=["POST"])
+def login():
+    data = request.get_json()
+    username = data.get("username")
+    password = data.get("password")
+
+    user = User.query.filter_by(username=username).first()
+
+    if user and user.check_password(password):
+        session["user_id"] = user.id
+        return user.to_dict(), 200
+    else:
+        return {"errors": ["username or password incorrect"]}, 401
+
+
+@app.route("/logout", methods=["GET"])
+def logout():
+    session.clear()
+    return jsonify(message="Logout successful"), 200
+
+
+class CheckSession(Resource):
+    def get(self):
+        user = User.query.filter(User.id == session.get("user_id")).first()
+        if user:
+            return jsonify(user.to_dict())
+        else:
+            return jsonify({"message": "401: Not Authorized"}), 401
+
+
+api.add_resource(CheckSession, "/check_session")
 
 
 if __name__ == "__main__":

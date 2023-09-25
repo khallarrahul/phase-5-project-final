@@ -2,6 +2,7 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.orm import validates
 from config import db, bcrypt
+from sqlalchemy.ext.hybrid import hybrid_property
 
 
 class User(db.Model, SerializerMixin):
@@ -34,6 +35,22 @@ class User(db.Model, SerializerMixin):
 
         return phone_number
 
+    def __init__(self, **kwargs):
+        super(User, self).__init__(**kwargs)
+
+    @hybrid_property
+    def password_hash(self):
+        return self._password_hash
+
+    @password_hash.setter
+    def password_hash(self, password):
+        # Generate a password hash and store it
+        self._password_hash = bcrypt.generate_password_hash(password).decode("utf-8")
+
+    def check_password(self, password):
+        # Check the provided password against the stored password hash
+        return bcrypt.check_password_hash(self._password_hash, password)
+
 
 class Product(db.Model, SerializerMixin):
     __tablename__ = "products"
@@ -51,6 +68,7 @@ class Product(db.Model, SerializerMixin):
 
     reviews = db.relationship("Review", back_populates="product")
     cart_items = db.relationship("CartItem", back_populates="product")
+    order_history = db.relationship("OrderHistory", back_populates="product")
 
     def __repr__(self):
         return f"<Product(id={self.id}, title='{self.title}')>"
@@ -75,15 +93,15 @@ class Review(db.Model, SerializerMixin):
 class OrderHistory(db.Model, SerializerMixin):
     __tablename__ = "order_history"
     id = db.Column(db.Integer, primary_key=True)
-    item_name = db.Column(db.String)
-    item_price = db.Column(db.Float)
     quantity = db.Column(db.Integer)
     order_date = db.Column(db.DateTime, onupdate=db.func.now())
     order_status = db.Column(db.Boolean)
     serialize_rules = ("-user_id",)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey("products.id"), nullable=False)
 
     user = db.relationship("User", back_populates="order_history")
+    product = db.relationship("Product", back_populates="order_history")
 
     def __repr__(self):
         return f"<OrderHistory(id={self.id}, item_name='{self.item_name}')>"
@@ -93,9 +111,6 @@ class CartItem(db.Model, SerializerMixin):
     __tablename__ = "cart_items"
     id = db.Column(db.Integer, primary_key=True)
     quantity = db.Column(db.Integer)
-    item_price = db.Column(db.Float)
-    item_name = db.Column(db.String)
-    image = db.Column(db.String)
     serialize_rules = ("-user_id", "-product_id")
     product_id = db.Column(db.Integer, db.ForeignKey("products.id"), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)

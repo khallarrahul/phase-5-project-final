@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { NavLink, useHistory } from 'react-router-dom';
 
-function Login() {
+function Login({onLogin}) {
   const [loginData, setLoginData] = useState({
     username: '',
     password: ''
@@ -27,6 +27,8 @@ function Login() {
       });
 
       if (response.ok) {
+        const userData = {name : loginData.username}
+        onLogin(userData)
         history.push('/');
   
         // Login successful, redirect to a protected route or dashboard

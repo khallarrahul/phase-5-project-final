@@ -1,41 +1,10 @@
-import React, {useState, useEffect} from 'react';
-import { NavLink, useHistory } from 'react-router-dom';
+import React from 'react';
+import { NavLink} from 'react-router-dom';
 import './NavBar.css'
 
-function NavBar() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const history = useHistory()
+function NavBar({user, onLogout}) {
 
-  useEffect(() => {
-    // You should replace this with your actual authentication logic.
-    // For example, make an API request to check the user's session on your server.
-    // If the user is authenticated, setIsAuthenticated(true), otherwise setIsAuthenticated(false).
-  
-    // For demonstration purposes, let's assume the user is authenticated.
-    setIsAuthenticated(true);
-  
-    // Don't forget to add setIsAuthenticated as a dependency if you use it within this block.
-  }, []);
 
-  const handleLogout = async () => {
-    try {
-      const response = await fetch('/logout', {
-        method: 'GET',
-      });
-
-      if (response.ok) {
-        // Logout successful, set isAuthenticated to false
-        setIsAuthenticated(false);
-        // Redirect to the home page
-        history.push('/');
-      } else {
-        // Handle logout error, e.g., display an error message
-        console.error('Logout failed');
-      }
-    } catch (error) {
-      console.error('Logout failed:', error);
-    }
-  };
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
     <div className="container">
@@ -55,29 +24,31 @@ function NavBar() {
       </button>
       <div className="navbar navbar-expand-lg navbar-dark bg-dark" id="navbarSupportedContent">
         <ul className="navbar-nav ml-auto mb-2 mb-lg-0">
-          <li className="nav-item">
-            <NavLink className="nav-link" exact to="/">
-              Home
-            </NavLink>
-            </li>
-          {isAuthenticated ? (
+          {user ? (
+          <>
             <li className="nav-item">
-              <NavLink className="nav-link" to="/" onClick={handleLogout}>
+              <span className="nav-link">Logged in as {user.name}</span>
+            </li>
+            <li className="nav-item">
+              <NavLink className="nav-link" onClick={onLogout} to='/login'>
                 Logout
               </NavLink>
             </li>
-          ) : (
+          </>
+        ) : (
+          <>
             <li className="nav-item">
               <NavLink className="nav-link" to="/login">
                 Login
               </NavLink>
             </li>
-          )}
-          <li className="nav-item">
-            <NavLink className="nav-link" to="/signup">
-              Signup
-            </NavLink>
-          </li>
+            <li className="nav-item">
+              <NavLink className="nav-link" to="/signup">
+                Signup
+              </NavLink>
+            </li>
+          </>
+        )}
           <li className="nav-item dropdown d-lg-none"> {/* Added d-lg-none class */}
             <NavLink
               className="nav-link dropdown-toggle"

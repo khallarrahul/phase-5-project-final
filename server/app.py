@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, make_response, request, session, redirect, url_for
-from flask_restful import Resource
+from flask_restful import Resource, reqparse
 from flask_sqlalchemy import SQLAlchemy  # Import SQLAlchemy
-from models import Product, User
+from models import Product, User, CartItem
 from config import app, db, api
 import bcrypt
 
@@ -114,9 +114,33 @@ api.add_resource(User_By_Id, "/users/<int:id>")
 
 
 class CartItems(Resource):
-    def post(self, id):
-        
+    def post(self, product_id):
+        try:
+            user_id = session.get("user_id")
+            if user_id is None:
+                return {"message": "User not logged in"}, 401
+            parser = reqparse.RequestParser()
+            parser.add_argument("quantity", type=int, required=True)
+            data = parser.parse_args()
+            quantity = data["quantity"]
 
+            product = Product.query.get(product_id)
+            if not product:
+                return {"message": "Product not found"}, 404
+
+            new_cart_item = CartItem(
+                user_id=user_id, product_id=product_id, quantity=quantity
+            )
+            db.session.add(new_cart_item)
+            db.session.commit()
+
+            return {"message": "Item added successfully to cart"}, 201
+
+        except Exception as e:
+            return {"error": str(e)}, 400
+
+
+api.add_resource(CartItems, "/cart/<int:product_id>")
 
 
 @app.route("/users", methods=["POST"])
@@ -177,19 +201,23 @@ def login():
         return {"errors": ["username or password incorrect"]}, 401
 
 
-@app.route("/logout", methods=["POST", "GET"])
+@app.route("/logout", methods=["GET"])
 def logout():
-    session.pop("user_id", None)
-    return redirect(url_for("/"))
+    session.clear()
+    return jsonify(message="Logout successful"), 200
 
 
 class CheckSession(Resource):
     def get(self):
-        user = User.query.filter(User.id == session.get("user_id")).first()
-        if user:
-            return jsonify(user.to_dict())
+        user_id = session.get("user_id")
+        if user_id:
+            user = User.query.filter_by(id=user_id).first()
+            if user:
+                return user.to_dict(), 200
+            else:
+                return {"message": "User not found"}, 404
         else:
-            return jsonify({"message": "401: Not Authorized"}), 401
+            return {"message": "Not logged in"}, 401
 
 
 api.add_resource(CheckSession, "/check_session")

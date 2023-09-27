@@ -18,6 +18,11 @@ function Cart() {
       });
   }, []);
 
+  // Calculate the total price
+  const totalPrice = cartItems.reduce((total, item) => {
+    return total + item.product.price * item.quantity;
+  }, 0);
+
   return (
     <div>
       <h1>Your Cart</h1>
@@ -31,6 +36,9 @@ function Cart() {
           </li>
         ))}
       </ul>
+      <div>
+        <h2>Total Price: ${totalPrice.toFixed(2)}</h2>
+      </div>
     </div>
   );
 }

@@ -4,28 +4,47 @@ import Login from './Login';
 import Home from './Home';
 import Signup from './Signup';
 import NavBar from './NavBar';
+import Cart from './Cart';
 import { Switch, Route } from 'react-router-dom';
 
 function App() {
   const [user, setUser] = useState(null);
 
-  // useEffect(() => {
-  //   fetch("/check_session").then((response) => {
-  //     if (response.ok) {
-  //       response.json().then((user) => setUser(user));
-  //     }
-  //   });
-  // }, []);
+  useEffect(() => {
+    fetch("/check_session").then((response) => {
+      if (response.ok) {
+        response.json().then((userData) => setUser(userData));
+      }
+    });
+  }, []);
 
-  // Function to set the user when logged in
+
   const handleLogin = (userData) => {
     setUser(userData);
   };
 
-  // Function to log the user out
-  const handleLogout = () => {
-    setUser(null);
-  };
+
+  function handleLogout() {
+    fetch("/logout", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (response.ok) {
+        
+          setUser(null);
+        } else {
+        
+          console.error("Logout failed");
+        }
+      })
+      .catch((error) => {
+        console.error("Error during logout:", error);
+      });
+  }
+  
 
   return (
     <div>
@@ -39,6 +58,9 @@ function App() {
         </Route>
         <Route path="/signup">
           <Signup />
+        </Route>
+        <Route path='/cart'>
+          <Cart />
         </Route>
         <Route>
           <h1>The page you are looking for does not exist</h1>

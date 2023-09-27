@@ -27,11 +27,16 @@ function NavBar({user, onLogout}) {
           {user ? (
           <>
             <li className="nav-item">
-              <span className="nav-link">Logged in as {user.name}</span>
+              <span className="nav-link">Welcome {user.name}</span>
             </li>
             <li className="nav-item">
               <NavLink className="nav-link" onClick={onLogout} to='/login'>
                 Logout
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink className="nav-link" to='/cart'>
+                Cart
               </NavLink>
             </li>
           </>
@@ -49,7 +54,7 @@ function NavBar({user, onLogout}) {
             </li>
           </>
         )}
-          <li className="nav-item dropdown d-lg-none"> {/* Added d-lg-none class */}
+          <li className="nav-item dropdown d-lg-none">
             <NavLink
               className="nav-link dropdown-toggle"
               to="/"
@@ -61,7 +66,6 @@ function NavBar({user, onLogout}) {
               Menu
             </NavLink>
             <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-              {/* Conditionally render the Home, Login, and Signup links based on screen size */}
               {window.innerWidth <= 992 && (
                 <>
                   <li>

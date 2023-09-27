@@ -85,7 +85,7 @@ api.add_resource(Users, "/users")
 
 class User_By_Id(Resource):
     def get(self, id):
-        user_by_id = User.query.get(id)  # Use query.get to get a user by ID
+        user_by_id = User.query.get(id)
         if user_by_id is not None:
             user_dict = user_by_id.to_dict()
             return make_response(jsonify(user_dict), 200)
@@ -111,6 +111,12 @@ class User_By_Id(Resource):
 
 
 api.add_resource(User_By_Id, "/users/<int:id>")
+
+
+class CartItems(Resource):
+    def post(self, id):
+        
+
 
 
 @app.route("/users", methods=["POST"])
@@ -152,7 +158,7 @@ def signup():
         return jsonify(error=str(e)), 400
 
     except Exception as e:
-        # Handle other exceptions here (e.g., database errors)
+        # Handle other exceptions here
         return jsonify(error="An error occurred while processing your request"), 500
 
 
@@ -171,10 +177,10 @@ def login():
         return {"errors": ["username or password incorrect"]}, 401
 
 
-@app.route("/logout", methods=["GET"])
+@app.route("/logout", methods=["POST", "GET"])
 def logout():
-    session.clear()
-    return jsonify(message="Logout successful"), 200
+    session.pop("user_id", None)
+    return redirect(url_for("/"))
 
 
 class CheckSession(Resource):

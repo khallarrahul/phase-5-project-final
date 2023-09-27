@@ -3,6 +3,7 @@ import './Home.css'
 
 function Home() {
   const [products, setProducts] = useState([]);
+  const [addedToCart, setAddedToCart] = useState({}); // State to track products added to the cart
 
   useEffect(() => {
     // Fetch products from your API
@@ -13,6 +14,23 @@ function Home() {
         setProducts(data.products);
       });
   }, []);
+
+  const addToCart = (productId) => {
+    // Make a POST request to add the product to the cart
+    fetch(`/cart/items/${productId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      // You can send any additional data related to the cart item here
+      body: JSON.stringify({}),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        // Update the addedToCart state to keep track of the added product
+        setAddedToCart({ ...addedToCart, [productId]: true });
+      });
+  };
 
   return (
     <div>
@@ -28,8 +46,15 @@ function Home() {
                   <h5 className='card-title'>{product.title}</h5>
                   {/* <p className='card-text'>{product.description}</p> */}
                   <div className='d-flex justify-content-around mb-5'>
-                    <h3 className='price'>${product.price}</h3> 
-                    <button className='btn btn-primary'>Add to Cart</button> 
+                    <h3 className='price'>${product.price}</h3>
+                    {/* Disable the "Add to Cart" button if the product is already in the cart */}
+                    <button
+                      className='btn btn-primary'
+                      onClick={() => addToCart(product.id)}
+                      disabled={addedToCart[product.id]}
+                    >
+                      {addedToCart[product.id] ? 'Added to Cart' : 'Add to Cart'}
+                    </button>
                   </div>
                 </div>
               </div>

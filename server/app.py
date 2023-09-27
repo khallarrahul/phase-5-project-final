@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, make_response, request, session, redirect, url_for
-from flask_restful import Resource, reqparse
+from flask_restful import Resource
 from flask_sqlalchemy import SQLAlchemy  # Import SQLAlchemy
 from models import Product, User, CartItem
 from config import app, db, api
@@ -115,32 +115,42 @@ api.add_resource(User_By_Id, "/users/<int:id>")
 
 class CartItems(Resource):
     def post(self, product_id):
-        try:
-            user_id = session.get("user_id")
-            if user_id is None:
-                return {"message": "User not logged in"}, 401
-            parser = reqparse.RequestParser()
-            parser.add_argument("quantity", type=int, required=True)
-            data = parser.parse_args()
-            quantity = data["quantity"]
+        if not session.get("user_id"):
+            return make_response(jsonify({"message": "Not logged in"}), 401)
 
-            product = Product.query.get(product_id)
-            if not product:
-                return {"message": "Product not found"}, 404
+        user_id = session["user_id"]
 
-            new_cart_item = CartItem(
-                user_id=user_id, product_id=product_id, quantity=quantity
-            )
+        product = Product.query.get(product_id)
+
+        if product:
+            new_cart_item = CartItem(user_id=user_id, product_id=product_id, quantity=1)
+
             db.session.add(new_cart_item)
             db.session.commit()
 
-            return {"message": "Item added successfully to cart"}, 201
+            return make_response(jsonify({"message": "Product added to cart"}), 201)
+        else:
+            return make_response(jsonify({"message": "Product not found"}), 404)
 
-        except Exception as e:
-            return {"error": str(e)}, 400
+
+api.add_resource(CartItems, "/cart/items/<int:product_id>")
 
 
-api.add_resource(CartItems, "/cart/<int:product_id>")
+class UserCart(Resource):
+    def get(self):
+        if not session.get("user_id"):
+            return make_response(jsonify({"message": "Not logged in"}), 401)
+
+        user_id = session["user_id"]
+
+        cart_items = CartItem.query.filter_by(user_id=user_id).all()
+        cart_items_list = [item.to_dict() for item in cart_items]
+
+        response = {"cart_items": cart_items_list}
+        return make_response(jsonify(response), 200)
+
+
+api.add_resource(UserCart, "/cart/user")
 
 
 @app.route("/users", methods=["POST"])

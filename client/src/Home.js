@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './Home.css'
+import './Home.css';
 import { NavLink } from 'react-router-dom';
 
 function Home() {
@@ -41,18 +41,20 @@ function Home() {
                   <img src={product.image} className='card-img-top' alt={product.title} />
                   <div className='card-body'>
                     <h5 className='card-title'>{product.title}</h5>
-                    <div className='d-flex justify-content-around mb-5'>
-                      <h3 className='price'>${product.price}</h3>
-                      <button
-                        className='btn btn-primary'
-                        onClick={() => addToCart(product.id)}
-                        disabled={addedToCart[product.id]}
-                      >
-                        {addedToCart[product.id] ? 'Added to Cart' : 'Add to Cart'}
-                      </button>
-                    </div>
                   </div>
                 </NavLink>
+                <div className='card-body'>
+                  <div className='d-flex justify-content-around mb-5'>
+                    <h3 className='price'>${product.price}</h3>
+                    <button
+                      className='btn btn-primary'
+                      onClick={() => addToCart(product.id)}
+                      disabled={addedToCart[product.id]}
+                    >
+                      {addedToCart[product.id] ? 'Added to Cart' : 'Add to Cart'}
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           ))}

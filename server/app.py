@@ -62,18 +62,26 @@ def check_for_values(data):
 class Users(Resource):
     def post(self):
         data = request.get_json()
-        errors = check_for_values(data)
+
+        # Remove leading and trailing whitespaces from data values
+        cleaned_data = {
+            key: value.strip() if isinstance(value, str) else value
+            for key, value in data.items()
+        }
+
+        errors = check_for_values(cleaned_data)
         if len(errors) > 0:
             return {"errors": errors}, 422
         try:
-            first_name = data.get("first_name")
-            last_name = data.get("last_name")
-            email = data.get("email")
-            username = data.get("username")
-            password_hash = data.get("password")
-            address = data.get("address")
-            phone_number = data.get("phone_number")
-            payment_card = data.get("payment_card")
+            # Now use cleaned_data instead of data for further processing
+            first_name = cleaned_data.get("first_name")
+            last_name = cleaned_data.get("last_name")
+            email = cleaned_data.get("email")
+            username = cleaned_data.get("username")
+            password_hash = cleaned_data.get("password")
+            address = cleaned_data.get("address")
+            phone_number = cleaned_data.get("phone_number")
+            payment_card = cleaned_data.get("payment_card")
 
             user = User(
                 first_name=first_name,
@@ -94,11 +102,10 @@ class Users(Resource):
 
         except IntegrityError as e:
             error_message = str(e)
-            # Return an error response with the error message
+
             return {"error": error_message}, 400
 
         except Exception as e:
-            # Handle other exceptions here
             error_message = "An error occurred while processing your request"
             return {"error": error_message}, 500
 

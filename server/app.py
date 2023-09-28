@@ -1,9 +1,13 @@
 from flask import Flask, jsonify, make_response, request, session, redirect, url_for
 from flask_restful import Resource
+from sqlalchemy.exc import IntegrityError
 from flask_sqlalchemy import SQLAlchemy  # Import SQLAlchemy
-from models import Product, User, CartItem
+from models import Product, User, CartItem, Review
 from config import app, db, api
 import bcrypt
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
 
 
 class Products(Resource):
@@ -47,31 +51,56 @@ class Product_By_Id(Resource):
 api.add_resource(Product_By_Id, "/products/<int:id>")
 
 
+def check_for_values(data):
+    errors = []
+    for key, value in data.items():
+        if not value:
+            errors.append(f"{key} is invalid or already exists")
+    return errors
+
+
 class Users(Resource):
     def post(self):
         data = request.get_json()
+        errors = check_for_values(data)
+        if len(errors) > 0:
+            return {"errors": errors}, 422
+        try:
+            first_name = data.get("first_name")
+            last_name = data.get("last_name")
+            email = data.get("email")
+            username = data.get("username")
+            password_hash = data.get("password")
+            address = data.get("address")
+            phone_number = data.get("phone_number")
+            payment_card = data.get("payment_card")
 
-        _password_hash = request.json.get("_password_hash", None)
-        hashed_pw = bcrypt.hashpw(_password_hash.encode("utf-8"), bcrypt.gensalt())
+            user = User(
+                first_name=first_name,
+                last_name=last_name,
+                email=email,
+                username=username,
+                address=address,
+                phone_number=phone_number,
+                payment_card=payment_card,
+            )
 
-        new_user = User(
-            first_name=data["first_name"],
-            last_name=data["last_name"],
-            email=data["email"],
-            username=data["username"],
-            _password_hash=hashed_pw,
-            address=data["address"],
-            phone_number=data["phone_number"],
-            payment_card=data["payment_card"],
-        )
+            user.password_hash = password_hash
 
-        db.session.add(new_user)
-        db.session.commit()
+            db.session.add(user)
+            db.session.commit()
 
-        new_user_dict = new_user.to_dict()
+            return user.to_dict(), 201
 
-        response = make_response(jsonify(new_user_dict), 201)
-        return response
+        except IntegrityError as e:
+            error_message = str(e)
+            # Return an error response with the error message
+            return {"error": error_message}, 400
+
+        except Exception as e:
+            # Handle other exceptions here
+            error_message = "An error occurred while processing your request"
+            return {"error": error_message}, 500
 
     def get(self):
         all_users = User.query.all()
@@ -96,10 +125,19 @@ class User_By_Id(Resource):
         user_by_id = User.query.get(id)
         if user_by_id:
             try:
+                # Delete cart items associated with the user
+                CartItem.query.filter_by(user_id=id).delete()
+
+                # Delete reviews posted by the user
+                # Review.query.filter_by(user_id=id).delete()
+
                 db.session.delete(user_by_id)
                 db.session.commit()
                 return make_response(
-                    {"message": "The user has been deleted successfully"}, 200
+                    {
+                        "message": "The user, their cart items, and reviews have been deleted successfully"
+                    },
+                    200,
                 )
             except Exception as e:
                 db.session.rollback()
@@ -153,47 +191,32 @@ class UserCart(Resource):
 api.add_resource(UserCart, "/cart/user")
 
 
-@app.route("/users", methods=["POST"])
-def signup():
-    data = request.get_json()
+class CartItemById(Resource):
+    def delete(self, cart_item_id):
+        if not session.get("user_id"):
+            return make_response(jsonify({"message": "Not logged in"}), 401)
 
-    try:
-        first_name = data.get("first_name")
-        last_name = data.get("last_name")
-        email = data.get("email")
-        username = data.get("username")
-        _password_hash = data.get("_password_hash")
-        address = data.get("address")
-        phone_number = data.get("phone_number")
-        payment_card = data.get("payment_card")
+        user_id = session["user_id"]
 
-        if len(phone_number) != 10:
-            raise ValueError("Please enter a valid phone number")
+        cart_item = CartItem.query.filter_by(id=cart_item_id, user_id=user_id).first()
 
-        # check if the email is unique
-        existing_email = User.query.filter_by(email=email).first()
-        if existing_email:
-            raise ValueError("The email address already exists")
+        if cart_item:
+            try:
+                db.session.delete(cart_item)
+                db.session.commit()
+                return make_response(
+                    {"message": "The cart item has been deleted successfully"}, 200
+                )
+            except Exception as e:
+                db.session.rollback()
+                return make_response(
+                    {"message": "Error deleting cart item", "error": str(e)}, 500
+                )
+        else:
+            return make_response({"message": "Cart item not found"}, 404)
 
-        existing_username = User.query.filter_by(username=username).first()
-        if existing_username:
-            raise ValueError("The username is already taken")
 
-        # Check if the phone number already exists
-        existing_user = User.query.filter_by(phone_number=phone_number).first()
-        if existing_user:
-            raise ValueError("The phone number already exists")
-
-        # Return success response if everything is fine
-        return jsonify(message="Registration successful"), 201
-
-    except ValueError as e:
-        # Return an error response with the error message
-        return jsonify(error=str(e)), 400
-
-    except Exception as e:
-        # Handle other exceptions here
-        return jsonify(error="An error occurred while processing your request"), 500
+api.add_resource(CartItemById, "/cart/items/<int:cart_item_id>")
 
 
 @app.route("/login", methods=["POST"])

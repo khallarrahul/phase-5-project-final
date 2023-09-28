@@ -5,6 +5,7 @@ import Home from './Home';
 import Signup from './Signup';
 import NavBar from './NavBar';
 import Cart from './Cart';
+import Product from './Product';
 import { Switch, Route } from 'react-router-dom';
 
 function App() {
@@ -61,6 +62,9 @@ function App() {
         </Route>
         <Route path='/cart'>
           <Cart />
+        </Route>
+        <Route path='/product/:productId'>
+          <Product />
         </Route>
         <Route>
           <h1>The page you are looking for does not exist</h1>

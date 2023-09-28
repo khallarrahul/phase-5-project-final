@@ -52,34 +52,41 @@ function Signup() {
         setIsSubmitted(true);
         setRegistrationError(false);
         console.log('Registration Successful');
+        setTimeout(() => {
+          setIsLoading(false);
+          setFormData({
+            first_name: '',
+            last_name: '',
+            email: '',
+            username: '',
+            password: '',
+            address: '',
+            phone_number: '',
+            payment_card: '',
+          });
+          setRegistrationError(false)
+        }, 2000);
       } else if (response.status === 400) {
         response.json().then((data) => {
-          console.log(data.error); // Set the error message
+          console.log(data.error);
         });
       } else {
         setIsSubmitted(false);
         setRegistrationError(true);
         console.log('Registration failed');
+        setTimeout(() => {
+          setIsLoading(false);
+          setRegistrationError(false)
+        }, 2000);
       }
     })
       .catch((error) => {
         console.error('Error', error);
       });
-    setTimeout(() => {
-      setIsLoading(false);
-      setFormData({
-        first_name: '',
-        last_name: '',
-        email: '',
-        username: '',
-        password: '',
-        address: '',
-        phone_number: '',
-        payment_card: '',
-      });
-      setRegistrationError(false)
-    }, 2000);
+    
   };
+
+  
 
   return (
     <div className="container mt-5">
@@ -175,13 +182,13 @@ function Signup() {
                 onChange={handleChange}
                 required
               />
-              <label htmlFor="_password_hash" className="form-label">Password</label>
+              <label htmlFor="password" className="form-label">Password</label>
               <input
                 type="password"
                 className="form-control"
-                id="_password_hash"
-                name="_password_hash"
-                value={formData._password_hash}
+                id="password"
+                name="password"
+                value={formData.password}
                 onChange={handleChange}
                 required
               />

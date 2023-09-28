@@ -16,7 +16,6 @@ class User(db.Model, SerializerMixin):
     address = db.Column(db.String, nullable=False)
     phone_number = db.Column(db.String(10), nullable=False)
     payment_card = db.Column(db.String, nullable=False)
-    serialize_rules = ("-password_hash",)
 
     reviews = db.relationship("Review", back_populates="user")
     order_history = db.relationship("OrderHistory", back_populates="user")

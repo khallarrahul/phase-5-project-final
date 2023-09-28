@@ -13,15 +13,34 @@ function Cart() {
     })
       .then((response) => response.json())
       .then((data) => {
-        // Update the state with the fetched cart items
         setCartItems(data.cart_items);
       });
   }, []);
 
-  // Calculate the total price
   const totalPrice = cartItems.reduce((total, item) => {
     return total + item.product.price * item.quantity;
   }, 0);
+
+  const handleDeleteItem = (cartItemId) => {
+    fetch(`/cart/items/${cartItemId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          setCartItems((prevCartItems) =>
+            prevCartItems.filter((item) => item.id !== cartItemId)
+          );
+        } else {
+          console.error('Failed to delete item from cart');
+        }
+      })
+      .catch((error) => {
+        console.error('Error deleting item from cart', error);
+      });
+  };
 
   return (
     <div>
@@ -30,9 +49,15 @@ function Cart() {
         {cartItems.map((item) => (
           <li key={item.id}>
             <div>{item.product.title}</div>
-            <img src={item.product.image} alt={item.product.title}/>
+            <img src={item.product.image} alt={item.product.title} />
             <div>Quantity: {item.quantity}</div>
             <div>Price: ${item.product.price}</div>
+            <button
+              className='btn btn-primary'
+              onClick={() => handleDeleteItem(item.id)}
+            >
+              Delete
+            </button>
           </li>
         ))}
       </ul>

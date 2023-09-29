@@ -6,10 +6,14 @@ import Signup from './Signup';
 import NavBar from './NavBar';
 import Cart from './Cart';
 import Product from './Product';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route} from 'react-router-dom';
+import Checkout from './Checkout';
+
+
 
 function App() {
   const [user, setUser] = useState(null);
+
 
   useEffect(() => {
     fetch("/check_session").then((response) => {
@@ -63,6 +67,10 @@ function App() {
         <Route path='/cart'>
           <Cart />
         </Route>
+        <Route path="/checkout">
+          <Checkout /> 
+        </Route>
+
         <Route path='/product/:productId'>
           <Product />
         </Route>

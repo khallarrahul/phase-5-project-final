@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import {NavLink} from 'react-router-dom';
 
 function Cart() {
   const [cartItems, setCartItems] = useState([]);
@@ -42,6 +43,27 @@ function Cart() {
       });
   };
 
+  const handleCheckout = () => {
+    // Send a POST request to initiate the checkout process
+    fetch('/checkout', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => {
+        if (response.status === 201) {
+          // Checkout successful, you can navigate to a checkout page
+          // or handle the success scenario as needed
+        } else {
+          console.error('Failed to initiate checkout');
+        }
+      })
+      .catch((error) => {
+        console.error('Error initiating checkout', error);
+      });
+  };
+
   return (
     <div>
       <h1>Your Cart</h1>
@@ -63,6 +85,11 @@ function Cart() {
       </ul>
       <div>
         <h2>Total Price: ${totalPrice.toFixed(2)}</h2>
+        <NavLink to='/checkout'>
+              <button className='btn btn-primary' onClick={handleCheckout}>
+                Checkout
+              </button>
+            </NavLink>
       </div>
     </div>
   );

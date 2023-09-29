@@ -7,6 +7,9 @@ from sqlalchemy.ext.hybrid import hybrid_property
 
 class User(db.Model, SerializerMixin):
     __tablename__ = "users"
+
+    serialize_rules = ("-reviews.user", "-order_history.user", "-cart_items.user")
+
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(20), nullable=False)
     last_name = db.Column(db.String(20), nullable=False)
@@ -53,6 +56,13 @@ class User(db.Model, SerializerMixin):
 
 class Product(db.Model, SerializerMixin):
     __tablename__ = "products"
+
+    serialize_rules = (
+        "-reviews.product",
+        "-order_history.product",
+        "-cart_items.product",
+    )
+
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String)
     description = db.Column(db.String)
@@ -63,7 +73,6 @@ class Product(db.Model, SerializerMixin):
     category = db.Column(db.String)
     image = db.Column(db.String)
     rating = db.Column(db.Float)
-    serialize_rules = ("-reviews",)
 
     reviews = db.relationship("Review", back_populates="product")
     cart_items = db.relationship("CartItem", back_populates="product")
@@ -75,10 +84,16 @@ class Product(db.Model, SerializerMixin):
 
 class Review(db.Model, SerializerMixin):
     __tablename__ = "reviews"
+
+    serialize_rules = (
+        "-product.reviews",
+        "-user.reviews",
+    )
+
     id = db.Column(db.Integer, primary_key=True)
     review_body = db.Column(db.String)
     rating = db.Column(db.Float)
-    serialize_rules = ("-user_id",)
+
     product_id = db.Column(db.Integer, db.ForeignKey("products.id"), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
 
@@ -91,11 +106,16 @@ class Review(db.Model, SerializerMixin):
 
 class OrderHistory(db.Model, SerializerMixin):
     __tablename__ = "order_history"
+
+    serialize_rules = (
+        "-user.order_history",
+        "-product.order_history",
+    )
+
     id = db.Column(db.Integer, primary_key=True)
     quantity = db.Column(db.Integer)
     order_date = db.Column(db.DateTime, onupdate=db.func.now())
     order_status = db.Column(db.Boolean)
-    serialize_rules = ("-user_id",)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     product_id = db.Column(db.Integer, db.ForeignKey("products.id"), nullable=False)
 
@@ -108,15 +128,19 @@ class OrderHistory(db.Model, SerializerMixin):
 
 class CartItem(db.Model, SerializerMixin):
     __tablename__ = "cart_items"
+
+    serialize_rules = (
+        "-user.cart_items",
+        "-product.cart_items",
+    )
+
     id = db.Column(db.Integer, primary_key=True)
     quantity = db.Column(db.Integer)
-    serialize_rules = ("-user_id", "-product_id")
     product_id = db.Column(db.Integer, db.ForeignKey("products.id"), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
 
     product = db.relationship("Product", back_populates="cart_items")
     user = db.relationship("User", back_populates="cart_items")
-    serialize_rules = ("-user.cart_items", "-product.cart_items")
 
     def __repr__(self):
         return f"<CartItem(id={self.id}, item_name='{self.item_name}')>"

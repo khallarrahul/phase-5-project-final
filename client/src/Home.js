@@ -30,7 +30,6 @@ function Home() {
 
   return (
     <div>
-      <h1>Choose from our exclusive collection</h1>
       <div className='container py-5'>
         <h1 className='text-center'>Products</h1>
         <div className='row row-cols-1 row-cols-md-3 g-4 py-5'>

@@ -46,9 +46,7 @@ function Product() {
 
   const handleAddReviewClick = () => {
     if (loggedIn) {
-      // Allow the user to add a review (you need to implement this)
-      // For example, you can show a review form
-      // In this example, we use a simple alert
+   
       alert('Showing review form');
     } else {
       // Redirect the user to the login page
@@ -73,15 +71,13 @@ function Product() {
     })
       .then((res) => {
         if (res.status === 201) {
-          // Review was posted successfully, you can redirect or show a confirmation message
+       
           alert('Review posted successfully');
-          // For example, you can redirect to the product page
-          // history.push(`/product/${productId}`);
+       
         } else if (res.status === 401) {
-          // User is not logged in, you can handle this case
+   
           alert('You are not logged in. Please log in to post a review.');
-          // For example, you can redirect to the login page
-          // history.push('/login');
+      
         } else {
           // Handle other error cases
           alert('Error posting review. Please try again later.');
@@ -143,7 +139,7 @@ function Product() {
             </form>
           </div>
         )}
-        {/* You can display other product details here */}
+
       </div>
     </div>
   );

@@ -51,11 +51,11 @@ h3, h5{
     display: flex;
     flex-direction: column;
     /* height: 100% */
-    font-size: large;
+    font-size: larger;
 }
 
 /* display: 'flex', flexDirection: 'column', height: '100%' */
 
 .price{
-    font-size: medium;
+    font-size: larger;
 }

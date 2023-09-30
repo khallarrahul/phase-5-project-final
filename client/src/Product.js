@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 
 
+
 function Product() {
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
@@ -134,7 +135,7 @@ function Product() {
           {product.title}
             <br></br>
             <br></br>
-          <img src={product.image} alt={product.title} style={{"height": "100", "width":"100"}}/>
+            <img src={product.image} alt={product.title} style={{ maxWidth: '100%', height: 'auto' }} />
         </h1>
     
         <div className="col-12 col-md-5 col-sm-6">
@@ -187,22 +188,24 @@ function Product() {
 
         {reviews.length > 0 && (
         <div className='row justify-content-center'>
-          <div className='row row-cols-1 row-cols-ml-3 g-4 py-5'>
+        <div className='row row-cols-1 row-cols-ml-3 g-4 py-5'>
           <h3 className='col-12'>Reviews</h3>
           <br></br>
           {reviews.map((review) => (
             <div className='col' key={review.id}>
               <div className='card'>
                 <div className='card-body'>
-                  <p>Rating: {review.rating}</p>
-                  <p className='card-text'>{review.review_body}</p>
-                  <p>{review.user.username}</p>
+                  <br></br>
+                  <h5 className='card-title text-center'>Rating: {review.rating}</h5>
+                  <p className='card-text text-center'>Comment: {review.review_body}</p>
+                  <p className='text-center'>{review.user.username}</p>
                 </div>
               </div>
             </div>
           ))}
         </div>
-        </div>
+      </div>
+      
         
         )}
       </div>

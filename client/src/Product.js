@@ -128,6 +128,16 @@ function Product() {
     return <div className="container mt-5">Loading...</div>;
   }
 
+  function calculateAverageRating(reviews){
+    if (reviews.length === 0){
+      return 0;
+    }
+    const totalRating = reviews.reduce((accumulator, review) => accumulator + review.rating, 0)
+    return totalRating/ reviews.length
+  }
+
+  const averageRating = calculateAverageRating(reviews)
+
   return (
     <div className="container mt-5">
       <div className="row">
@@ -143,7 +153,9 @@ function Product() {
           <h1>{product.description}</h1>
           <h3>Brand: {product.brand}</h3>
           <h5>Category: {product.category}</h5>
+          <div>{averageRating.toFixed(2)} / 5</div>
           <h1>${product.price}</h1>
+          
           <button onClick={handleAddReviewClick} className='btn btn-secondary'>Add a Review</button>
         </div>
 
@@ -189,16 +201,17 @@ function Product() {
         {reviews.length > 0 && (
         <div className='row justify-content-center'>
         <div className='row row-cols-1 row-cols-ml-3 g-4 py-5'>
-          <h3 className='col-12'>Reviews</h3>
+          <h3 className='col-12'>Reviews </h3>    
           <br></br>
           {reviews.map((review) => (
             <div className='col' key={review.id}>
               <div className='card'>
                 <div className='card-body'>
+          
+                  <h5 className='card-title text-left'>Rating: {review.rating}</h5>
                   <br></br>
-                  <h5 className='card-title text-center'>Rating: {review.rating}</h5>
-                  <p className='card-text text-center'>Comment: {review.review_body}</p>
-                  <p className='text-center'>{review.user.username}</p>
+                  <h1 className='card-text text-center'>{review.review_body}</h1>
+                  <p className='text-right'>{review.user.username}</p>
                 </div>
               </div>
             </div>

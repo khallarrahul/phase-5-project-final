@@ -9,7 +9,7 @@ function NavBar({user, onLogout}) {
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
     <div className="container">
       <NavLink className="navbar-brand" to="/">
-        <b>E-Commerce</b>
+        <b>SELL-IT-LIKE-PRO</b>
       </NavLink>
       <button
         className="navbar-toggler"
@@ -91,6 +91,7 @@ function NavBar({user, onLogout}) {
       </div>
     </div>
   </nav>
+  
     
   );
 }

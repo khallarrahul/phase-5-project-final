@@ -1,38 +1,11 @@
-.App {
-  text-align: center;
+/* CSS for a sticky footer */
+#content-wrapper {
+  min-height: 100vh; /* Ensure the content wrapper takes up at least the full viewport height */
+  padding-bottom: 100px; /* Reserve space for the footer at the bottom */
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.footer {
+   /* Position the footer as fixed to the bottom */
+  bottom: 0;
+  width: 100%; /* Make the footer span the entire width of the viewport */
 }

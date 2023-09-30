@@ -6,14 +6,12 @@ import Signup from './Signup';
 import NavBar from './NavBar';
 import Cart from './Cart';
 import Product from './Product';
-import { Switch, Route} from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import Checkout from './Checkout';
-
-
+// import Footer from './Footer';
 
 function App() {
   const [user, setUser] = useState(null);
-
 
   useEffect(() => {
     fetch("/check_session").then((response) => {
@@ -23,11 +21,9 @@ function App() {
     });
   }, []);
 
-
   const handleLogin = (userData) => {
     setUser(userData);
   };
-
 
   function handleLogout() {
     fetch("/logout", {
@@ -38,10 +34,8 @@ function App() {
     })
       .then((response) => {
         if (response.ok) {
-        
           setUser(null);
         } else {
-        
           console.error("Logout failed");
         }
       })
@@ -49,10 +43,9 @@ function App() {
         console.error("Error during logout:", error);
       });
   }
-  
 
   return (
-    <div>
+    <div id="content-wrapper">
       <NavBar user={user} onLogout={handleLogout} />
       <Switch>
         <Route exact path="/">
@@ -68,9 +61,8 @@ function App() {
           <Cart />
         </Route>
         <Route path="/checkout">
-          <Checkout /> 
+          <Checkout />
         </Route>
-
         <Route path='/product/:productId'>
           <Product />
         </Route>
@@ -79,6 +71,9 @@ function App() {
           <h1>ERROR 404</h1>
         </Route>
       </Switch>
+      {/* <footer className="footer">
+        <Footer/>
+      </footer> */}
     </div>
   );
 }

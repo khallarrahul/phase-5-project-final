@@ -93,6 +93,7 @@ class Review(db.Model, SerializerMixin):
     serialize_rules = (
         "-product.reviews",
         "-user.reviews",
+        "user.username",
     )
 
     id = db.Column(db.Integer, primary_key=True)

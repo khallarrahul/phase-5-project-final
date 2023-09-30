@@ -180,6 +180,7 @@ function Product() {
                 <li key={review.id}>
                   <p>Rating: {review.rating}</p>
                   <p>{review.review_body}</p>
+                  <p>{review.user.username}</p>
                 </li>
               ))}
             </ul>

@@ -15,13 +15,13 @@ function App() {
   const [user, setUser] = useState(null);
 
 
-  // useEffect(() => {
-  //   fetch("/check_session").then((response) => {
-  //     if (response.ok) {
-  //       response.json().then((userData) => setUser(userData));
-  //     }
-  //   });
-  // }, []);
+  useEffect(() => {
+    fetch("/check_session").then((response) => {
+      if (response.ok) {
+        response.json().then((userData) => setUser(userData));
+      }
+    });
+  }, []);
 
 
   const handleLogin = (userData) => {

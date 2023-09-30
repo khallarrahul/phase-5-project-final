@@ -7,6 +7,7 @@ function Product() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [reviewBody, setReviewBody] = useState('');
   const [rating, setRating] = useState(0);
+  const [reviews, setReviews] = useState([]);
   const history = useHistory();
 
   useEffect(() => {
@@ -44,9 +45,27 @@ function Product() {
       });
   }, []);
 
+  useEffect(() => {
+    // Fetch reviews for the current product
+    fetch(`/reviews/${productId}`)
+      .then((res) => {
+        if (res.status === 200) {
+          return res.json();
+        } else {
+          throw new Error('Failed to fetch reviews');
+        }
+      })
+      .then((data) => {
+        setReviews(data.reviews);
+      })
+      .catch((error) => {
+        console.error('Error fetching reviews:', error);
+      });
+  }, [productId]);
+
   const handleAddReviewClick = () => {
     if (loggedIn) {
-   
+      // Show the review form
       alert('Showing review form');
     } else {
       // Redirect the user to the login page
@@ -71,13 +90,28 @@ function Product() {
     })
       .then((res) => {
         if (res.status === 201) {
-       
+          // Review posted successfully, fetch and update reviews
+          fetch(`/reviews/${productId}`)
+            .then((res) => {
+              if (res.status === 200) {
+                return res.json();
+              } else {
+                throw new Error('Failed to fetch reviews');
+              }
+            })
+            .then((data) => {
+              setReviews(data.reviews);
+            })
+            .catch((error) => {
+              console.error('Error fetching reviews:', error);
+            });
           alert('Review posted successfully');
-       
+          // Clear the review form fields
+          setReviewBody('');
+          setRating(0);
         } else if (res.status === 401) {
-   
+          // User is not logged in, handle this case as needed
           alert('You are not logged in. Please log in to post a review.');
-      
         } else {
           // Handle other error cases
           alert('Error posting review. Please try again later.');
@@ -102,9 +136,7 @@ function Product() {
         <p>Brand: {product.brand}</p>
         <p>Category: {product.category}</p>
         <p>${product.price}</p>
-        <button onClick={handleAddReviewClick}>
-          Add a Review
-        </button>
+        <button onClick={handleAddReviewClick}>Add a Review</button>
 
         {loggedIn && (
           <div>
@@ -140,10 +172,22 @@ function Product() {
           </div>
         )}
 
+        {reviews.length > 0 && (
+          <div>
+            <h3>Reviews</h3>
+            <ul>
+              {reviews.map((review) => (
+                <li key={review.id}>
+                  <p>Rating: {review.rating}</p>
+                  <p>{review.review_body}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     </div>
   );
 }
 
 export default Product;
-

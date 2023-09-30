@@ -164,11 +164,14 @@ class CartItems(Resource):
             return make_response(jsonify({"message": "Not logged in"}), 401)
 
         user_id = session["user_id"]
+        quantity = request.json.get("quantity", 1)  # Default to 1 if not specified
 
         product = Product.query.get(product_id)
 
         if product:
-            new_cart_item = CartItem(user_id=user_id, product_id=product_id, quantity=1)
+            new_cart_item = CartItem(
+                user_id=user_id, product_id=product_id, quantity=quantity
+            )
 
             db.session.add(new_cart_item)
             db.session.commit()

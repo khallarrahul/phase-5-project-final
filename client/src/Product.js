@@ -3,7 +3,6 @@ import { useParams, useHistory } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faStar } from '@fortawesome/free-solid-svg-icons';
 
-
 function Product() {
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
@@ -11,6 +10,8 @@ function Product() {
   const [reviewBody, setReviewBody] = useState('');
   const [rating, setRating] = useState(0);
   const [reviews, setReviews] = useState([]);
+  const [quantity, setQuantity] = useState(1); // Added quantity state
+  const [addedToCart, setAddedToCart] = useState(false); // Added addedToCart state
   const history = useHistory();
 
   useEffect(() => {
@@ -125,6 +126,35 @@ function Product() {
       });
   };
 
+  const addToCart = () => {
+    if (loggedIn) {
+      // Send the product ID and quantity to the server to add to cart
+      fetch(`/cart/items/${productId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ quantity }), // Send the selected quantity
+      })
+        .then((res) => {
+          if (res.status === 201) {
+            setAddedToCart(true); // Mark as added to cart
+            alert('Product added to cart successfully');
+          } else if (res.status === 401) {
+            alert('You are not logged in. Please log in to add to cart.');
+          } else {
+            alert('Error adding product to cart. Please try again later.');
+          }
+        })
+        .catch((error) => {
+          console.error('Error adding product to cart:', error);
+        });
+    } else {
+      // Redirect the user to the login page if not logged in
+      history.push('/login');
+    }
+  };
+
   if (!product) {
     return <div className="container mt-5">Loading...</div>;
   }
@@ -154,10 +184,30 @@ function Product() {
           <h1>{product.description}</h1>
           <h3>Brand: {product.brand}</h3>
           <h5>Category: {product.category}</h5>
-          <div>{averageRating.toFixed(2)} / 5</div>
+          <div> <FontAwesomeIcon icon={faStar} /> {averageRating.toFixed(2)} / 5</div>
           <h1>${product.price}</h1>
-          
-          <button onClick={handleAddReviewClick} className='btn btn-secondary'>Add a Review</button>
+          <div className='col-3'>
+          <input
+            type="number"
+            min="1"
+            max="10"
+            className="form-control form-control-sm"
+            value={quantity}
+            onChange={(e) => setQuantity(e.target.value)}
+          />
+          </div>
+          <div className="btn-group mt-2"> {/* Wrap both buttons in a div */}
+  <button
+    onClick={addToCart}
+    className={`btn btn-secondary ${addedToCart ? 'disabled' : ''}`}
+  >
+    {addedToCart ? 'Added to Cart' : 'Add to Cart'}
+  </button>
+
+  <button onClick={handleAddReviewClick} className='btn btn-secondary'>
+    Add a Review
+  </button>
+</div>
         </div>
 
         {loggedIn && (

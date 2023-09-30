@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect} from 'react';
 import './Home.css';
-import { NavLink } from 'react-router-dom';
+import { NavLink , useHistory} from 'react-router-dom';
 
 function Home() {
   const [products, setProducts] = useState([]);
   const [addedToCart, setAddedToCart] = useState({});
   const [quantity, setQuantity] = useState(1);
+  const history = useHistory()
 
   useEffect(() => {
     fetch('/products')
@@ -23,7 +24,7 @@ function Home() {
       if (res.status === 200) {
         return res.json();
       } else {
-        window.location.href = '/login';
+        history.push('/login');
         throw new Error('Not logged in');
       }
     })
@@ -64,14 +65,23 @@ function Home() {
                   <div className='d-flex justify-content-around mb-5'>
                     <h3 className='price'>${product.price}</h3>
                     <div className="col-3">
-                      <input
-                        type="number"
-                        min="1"
-                        max="10"
-                        className="form-control form-control-sm"
-                        defaultValue="1"
-                        onChange={(e) => setQuantity(e.target.value)}
-                      />
+                    <input
+                      type="number"
+                      min="1"
+                      max="10"
+                      className="form-control form-control-sm"
+                      defaultValue="1"
+                      value={quantity}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        if (value <= 0) {
+                          return;
+                        } else if(value > 10){
+                          return
+                        }
+                        setQuantity(value);
+                      }}
+                    />
                     </div>
                     <button
                       className='btn btn-primary'

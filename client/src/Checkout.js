@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import './Checkout.css'
 
-function Checkout({ totalPrice }) { // Use the totalPrice prop
+function Checkout() { 
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
@@ -9,6 +11,7 @@ function Checkout({ totalPrice }) { // Use the totalPrice prop
     payment_card: '',
     cvv: '',
   });
+  const [totalPrice, setTotalPrice] = useState(0);
 
 
   const handleChange = (e) => {
@@ -18,31 +21,69 @@ function Checkout({ totalPrice }) { // Use the totalPrice prop
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Simulate a successful checkout process
     console.log('Checkout form submitted with data:', formData);
-    // You can reset the form or perform other actions here
   };
+
+  useEffect(() => {
+    axios.get('/cart/user') 
+      .then(response => {
+        const cartItems = response.data.cart_items;
+        const totalPrice = cartItems.reduce((total, item) => {
+          return total + item.product.price * item.quantity;
+        }, 0);
+        setTotalPrice(totalPrice);
+      })
+      .catch(error => {
+        console.error('Error fetching cart items:', error);
+      });
+  }, []);
+
+  function handleShipping(totalPrice){
+    if (totalPrice === 0){
+      return  0;
+    } else{
+      return 8.99;
+    }
+  }
 
   return (
     <div className="container mt-5">
-      <h1>{" "}</h1>
-      <div className="row">
-        <h1 className="col-12 col-md-7 col-sm-6">
-          Checkout
-          <div className="col-12 col-ml-7 col-sm-8">
-            <br></br>
-            <h3>Order Review</h3>
-            <h5>Total Price: ${totalPrice}</h5> {/* Use the totalPrice prop here */}
-            <h5>Shipping and Handling: $8.99</h5> {/* You can replace this with actual shipping cost */}
-            <h5>Tax (12%): ${(totalPrice * 0.12)}</h5> {/* Calculate tax based on total price */}
-            <h5>Before Tax: ${(totalPrice + 8.99)}</h5> {/* Calculate before tax based on total price and shipping */}
-            <h5>Subtotal: ${(totalPrice + 8.99 + totalPrice * 0.12)}</h5> {/* Calculate subtotal */}
-          </div>
-        </h1>
-        <div className="col-12 col-md-5 col-sm-6 signup-form">
-          <div>
-            <h2>Checkout Form</h2>
-            <form onSubmit={handleSubmit}>
+  <div className="row">
+    <div className="col-12 col-md-7 col-sm-6">
+      <h1 className="checkout-title">Checkout</h1>
+      <br></br>
+      <br></br>
+      <div className='card order'>
+        <div className="card-body">
+        <h2 className="card-title">Order Review</h2>
+        <br></br>
+          <p className="card-text">
+            <span className="black-text">Total Price: </span>
+            <span style={{ color: 'blue', float: 'right' }}>${totalPrice}</span>
+          </p>
+          <p className="card-text">
+            <span className="black-text">Shipping and Handling: </span>
+            <span style={{ color: 'blue', float: 'right'}}>${handleShipping(totalPrice)}</span>
+          </p>
+          <p className="card-text">
+            <span className="black-text">GST/HST: </span>
+            <span style={{ color: 'blue', float: 'right'}}>${(totalPrice * 0.12)}</span>
+          </p>
+          <p className="card-text">
+            <span className="black-text">Total Before Tax: </span>
+            <span style={{ color: 'blue', float: 'right'}}>${(totalPrice + handleShipping(totalPrice))}</span>
+          </p>
+          <p className="card-text">
+            <span className="black-text">Grade Total: </span>
+            <span style={{ color: 'blue', float: 'right' }}>${(totalPrice + handleShipping(totalPrice) + totalPrice * 0.12).toFixed(2)}</span>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div className="col-12 col-md-5 col-sm-6 signup-form">
+      <div>
+        <h2>Checkout Form</h2>
+        <form onSubmit={handleSubmit}>
               <div>
                 <label htmlFor="first_name" className="form-label">First Name:</label>
                 <input
@@ -120,10 +161,11 @@ function Checkout({ totalPrice }) { // Use the totalPrice prop
                 Place Your Order 
               </button>
             </form>
-          </div>
-        </div>
       </div>
     </div>
+  </div>
+</div>
+
   );
 }
 

@@ -8,7 +8,6 @@ import Cart from './Cart';
 import Product from './Product';
 import { Switch, Route } from 'react-router-dom';
 import Checkout from './Checkout';
-// import Footer from './Footer';
 
 function App() {
   const [user, setUser] = useState(null);

@@ -10,8 +10,8 @@ function Product() {
   const [reviewBody, setReviewBody] = useState('');
   const [rating, setRating] = useState(0);
   const [reviews, setReviews] = useState([]);
-  const [quantity, setQuantity] = useState(1); // Added quantity state
-  const [addedToCart, setAddedToCart] = useState(false); // Added addedToCart state
+  const [quantity, setQuantity] = useState(1);
+  const [addedToCart, setAddedToCart] = useState(false);
   const history = useHistory();
 
   useEffect(() => {
@@ -32,7 +32,6 @@ function Product() {
   }, [productId]);
 
   useEffect(() => {
-    // Check if the user is logged in by making a request to the CheckSession endpoint
     fetch('/check_session')
       .then((res) => {
         if (res.status === 200) {
@@ -42,15 +41,14 @@ function Product() {
         }
       })
       .then((data) => {
-        setLoggedIn(true); // User is logged in
+        setLoggedIn(true);
       })
       .catch((error) => {
-        setLoggedIn(false); // User is not logged in
+        setLoggedIn(false); 
       });
   }, []);
 
   useEffect(() => {
-    // Fetch reviews for the current product
     fetch(`/reviews/${productId}`)
       .then((res) => {
         if (res.status === 200) {
@@ -69,22 +67,20 @@ function Product() {
 
   const handleAddReviewClick = () => {
     if (loggedIn) {
-      // Show the review form
       alert('Showing review form');
     } else {
-      // Redirect the user to the login page
       history.push('/login');
     }
   };
 
   const handleReviewSubmit = (e) => {
     e.preventDefault();
-    // Handle the review submission
+
     const reviewData = {
       review_body: reviewBody,
       rating,
     };
-    // Send the review data to the server
+ 
     fetch(`/reviews/${productId}`, {
       method: 'POST',
       headers: {
@@ -110,14 +106,14 @@ function Product() {
               console.error('Error fetching reviews:', error);
             });
           alert('Review posted successfully');
-          // Clear the review form fields
+          
           setReviewBody('');
           setRating(0);
         } else if (res.status === 401) {
-          // User is not logged in, handle this case as needed
+ 
           alert('You are not logged in. Please log in to post a review.');
         } else {
-          // Handle other error cases
+ 
           alert('Error posting review. Please try again later.');
         }
       })
@@ -128,17 +124,17 @@ function Product() {
 
   const addToCart = () => {
     if (loggedIn) {
-      // Send the product ID and quantity to the server to add to cart
+
       fetch(`/cart/items/${productId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ quantity }), // Send the selected quantity
+        body: JSON.stringify({ quantity }), 
       })
         .then((res) => {
           if (res.status === 201) {
-            setAddedToCart(true); // Mark as added to cart
+            setAddedToCart(true);
             alert('Product added to cart successfully');
           } else if (res.status === 401) {
             alert('You are not logged in. Please log in to add to cart.');
@@ -150,7 +146,6 @@ function Product() {
           console.error('Error adding product to cart:', error);
         });
     } else {
-      // Redirect the user to the login page if not logged in
       history.push('/login');
     }
   };
@@ -192,11 +187,20 @@ function Product() {
             min="1"
             max="10"
             className="form-control form-control-sm"
+            defaultValue="1"
             value={quantity}
-            onChange={(e) => setQuantity(e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value;
+              if (value <= 0) {
+                return;
+              } else if(value > 10){
+                return
+              }
+              setQuantity(value);
+            }}
           />
           </div>
-          <div className="btn-group mt-2"> {/* Wrap both buttons in a div */}
+          <div className="btn-group mt-2"> 
   <button
     onClick={addToCart}
     className={`btn btn-secondary ${addedToCart ? 'disabled' : ''}`}
@@ -237,7 +241,12 @@ function Product() {
                   min="1"
                   max="5"
                   value={rating}
-                  onChange={(e) => setRating(Number(e.target.value))}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if(value <= 0){
+                      return;
+                    }
+                    setRating(Number(value))}}
                   required
                 />
               </div>

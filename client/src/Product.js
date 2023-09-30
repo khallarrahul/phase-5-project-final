@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 
+
 function Product() {
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
@@ -123,29 +124,39 @@ function Product() {
   };
 
   if (!product) {
-    return <div>Loading...</div>;
+    return <div className="container mt-5">Loading...</div>;
   }
 
   return (
-    <div>
-      <h1>Product Details</h1>
-      <div>
-        <h2>{product.title}</h2>
-        <img src={product.image} alt={product.title} />
-        <p>{product.description}</p>
-        <p>Brand: {product.brand}</p>
-        <p>Category: {product.category}</p>
-        <p>${product.price}</p>
-        <button onClick={handleAddReviewClick}>Add a Review</button>
+    <div className="container mt-5">
+      <div className="row">
+        <h1 className="col-12 col-md-7 col-sm-6">
+          {product.title}
+            <br></br>
+            <br></br>
+          <img src={product.image} alt={product.title} style={{"height": "100", "width":"100"}}/>
+        </h1>
+    
+        <div className="col-12 col-md-5 col-sm-6">
+          <br></br>
+          <h1>{product.description}</h1>
+          <h3>Brand: {product.brand}</h3>
+          <h5>Category: {product.category}</h5>
+          <h1>${product.price}</h1>
+          <button onClick={handleAddReviewClick} className='btn btn-secondary'>Add a Review</button>
+        </div>
 
         {loggedIn && (
-          <div>
+          <div >
+            <br></br>
+            <br></br>
             <h3>Add a Review</h3>
             <form onSubmit={handleReviewSubmit}>
               <div>
-                <label htmlFor="reviewBody">Review:</label>
+                <label htmlFor="reviewBody" className="form-label">Review:</label>
                 <textarea
                   id="reviewBody"
+                  className="form-control"
                   name="reviewBody"
                   value={reviewBody}
                   onChange={(e) => setReviewBody(e.target.value)}
@@ -153,10 +164,11 @@ function Product() {
                 />
               </div>
               <div>
-                <label htmlFor="rating">Rating:</label>
+                <label htmlFor="rating"  className="form-label">Rating:</label>
                 <input
                   type="number"
                   id="rating"
+                  className="form-control"
                   name="rating"
                   min="1"
                   max="5"
@@ -166,25 +178,32 @@ function Product() {
                 />
               </div>
               <div>
-                <button type="submit">Submit Review</button>
+                <br></br>
+                <button type="submit" className="btn btn-secondary">Submit Review</button>
               </div>
             </form>
           </div>
         )}
 
         {reviews.length > 0 && (
-          <div>
-            <h3>Reviews</h3>
-            <ul>
-              {reviews.map((review) => (
-                <li key={review.id}>
+        <div className='row justify-content-center'>
+          <div className='row row-cols-1 row-cols-ml-3 g-4 py-5'>
+          <h3 className='col-12'>Reviews</h3>
+          <br></br>
+          {reviews.map((review) => (
+            <div className='col' key={review.id}>
+              <div className='card'>
+                <div className='card-body'>
                   <p>Rating: {review.rating}</p>
-                  <p>{review.review_body}</p>
+                  <p className='card-text'>{review.review_body}</p>
                   <p>{review.user.username}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        </div>
+        
         )}
       </div>
     </div>

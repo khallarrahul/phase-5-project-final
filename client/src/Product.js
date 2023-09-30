@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser, faStar } from '@fortawesome/free-solid-svg-icons';
 
 
 function Product() {
@@ -208,10 +209,18 @@ function Product() {
               <div className='card'>
                 <div className='card-body'>
           
-                  <h5 className='card-title text-left'>Rating: {review.rating}</h5>
-                  <br></br>
+                  <h5 className="d-flex justify-content-between"> 
+                    <div>
+                      <FontAwesomeIcon icon={faStar} />
+                      <span className='card-title text-left'>{review.rating}</span>
+                    </div>
+                  </h5>
                   <h1 className='card-text text-center'>{review.review_body}</h1>
-                  <p className='text-right'>{review.user.username}</p>
+                  <br></br>
+                  <h5 className='text-right'>
+                    <FontAwesomeIcon icon={faUser} /> {review.user.username}
+                  </h5>
+
                 </div>
               </div>
             </div>

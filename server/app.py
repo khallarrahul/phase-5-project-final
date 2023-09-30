@@ -226,46 +226,46 @@ class CartItemById(Resource):
 api.add_resource(CartItemById, "/cart/items/<int:cart_item_id>")
 
 
-# class ReviewsByProductId(Resource):
-#     def get(self, product_id):
-#         reviews = Review.query.filter_by(product_id=product_id).all()
-#         review_list = [review.to_dict() for review in reviews]
-#         return make_response(jsonify({"reviews": review_list}), 200)
+class ReviewsByProductId(Resource):
+    def get(self, product_id):
+        reviews = Review.query.filter_by(product_id=product_id).all()
+        review_list = [review.to_dict() for review in reviews]
+        return make_response(jsonify({"reviews": review_list}), 200)
 
-#     def post(self, product_id):
-#         if not session.get("user_id"):
-#             return make_response(jsonify({"message": "Not logged in"}), 401)
+    def post(self, product_id):
+        if not session.get("user_id"):
+            return make_response(jsonify({"message": "Not logged in"}), 401)
 
-#         user_id = session["user_id"]
-#         data = request.get_json()
+        user_id = session["user_id"]
+        data = request.get_json()
 
-#         review_body = data.get("review_body")
-#         rating = data.get("rating")
+        review_body = data.get("review_body")
+        rating = data.get("rating")
 
-#         if not review_body or not rating:
-#             return make_response(
-#                 jsonify({"message": "Review body and rating are required"}), 400
-#             )
+        if not review_body or not rating:
+            return make_response(
+                jsonify({"message": "Review body and rating are required"}), 400
+            )
 
-#         product = Product.query.get(product_id)
+        product = Product.query.get(product_id)
 
-#         if not product:
-#             return make_response(jsonify({"message": "Product not found"}), 404)
+        if not product:
+            return make_response(jsonify({"message": "Product not found"}), 404)
 
-#         review = Review(
-#             review_body=review_body,
-#             rating=rating,
-#             product_id=product_id,
-#             user_id=user_id,
-#         )
+        review = Review(
+            review_body=review_body,
+            rating=rating,
+            product_id=product_id,
+            user_id=user_id,
+        )
 
-#         db.session.add(review)
-#         db.session.commit()
+        db.session.add(review)
+        db.session.commit()
 
-#         return make_response(jsonify({"message": "Review posted successfully"}), 201)
+        return make_response(jsonify({"message": "Review posted successfully"}), 201)
 
 
-# api.add_resource(ReviewsByProductId, "/reviews/<int:product_id>")
+api.add_resource(ReviewsByProductId, "/reviews/<int:product_id>")
 
 
 # class CheckoutResource(Resource):

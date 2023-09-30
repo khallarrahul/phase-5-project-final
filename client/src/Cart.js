@@ -44,7 +44,7 @@ function Cart() {
   };
 
   const handleCheckout = () => {
-    // Send a POST request to initiate the checkout process
+
     fetch('/checkout', {
       method: 'POST',
       headers: {
@@ -53,8 +53,7 @@ function Cart() {
     })
       .then((response) => {
         if (response.status === 201) {
-          // Checkout successful, you can navigate to a checkout page
-          // or handle the success scenario as needed
+
         } else {
           console.error('Failed to initiate checkout');
         }

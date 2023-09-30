@@ -8,7 +8,12 @@ from sqlalchemy.ext.hybrid import hybrid_property
 class User(db.Model, SerializerMixin):
     __tablename__ = "users"
 
-    serialize_rules = ("-reviews.user", "-order_history.user", "-cart_items.user")
+    serialize_only = (
+        "reviews.review_body",
+        "reviews.rating",
+        "order_history.id",
+        "cart_items.id",
+    )
 
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(20), nullable=False)

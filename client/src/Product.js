@@ -151,7 +151,7 @@ function Product() {
   };
 
   if (!product) {
-    return <div className="container mt-5">Loading...</div>;
+    return <h1 className="container mt-5">Loading...</h1>;
   }
 
   function calculateAverageRating(reviews){
@@ -262,12 +262,10 @@ function Product() {
         <div className='row justify-content-center'>
         <div className='row row-cols-1 row-cols-ml-3 g-4 py-5'>
           <h3 className='col-12'>Reviews </h3>    
-          <br></br>
           {reviews.map((review) => (
             <div className='col' key={review.id}>
               <div className='card'>
                 <div className='card-body'>
-          
                   <h5 className="d-flex justify-content-between"> 
                     <div>
                       <FontAwesomeIcon icon={faStar} />
@@ -275,7 +273,6 @@ function Product() {
                     </div>
                   </h5>
                   <h1 className='card-text text-center'>{review.review_body}</h1>
-                  <br></br>
                   <h5 className='text-right'>
                     <FontAwesomeIcon icon={faUser} /> {review.user.username}
                   </h5>

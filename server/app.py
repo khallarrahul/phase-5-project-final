@@ -132,11 +132,7 @@ class User_By_Id(Resource):
         user_by_id = User.query.get(id)
         if user_by_id:
             try:
-                # Delete cart items associated with the user
                 CartItem.query.filter_by(user_id=id).delete()
-
-                # Delete reviews posted by the user
-                # Review.query.filter_by(user_id=id).delete()
 
                 db.session.delete(user_by_id)
                 db.session.commit()

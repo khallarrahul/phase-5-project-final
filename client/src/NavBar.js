@@ -1,6 +1,8 @@
 import React from 'react';
 import { NavLink} from 'react-router-dom';
 import './NavBar.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
 
 function NavBar({user, onLogout}) {
 
@@ -36,7 +38,7 @@ function NavBar({user, onLogout}) {
             </li>
             <li className="nav-item">
               <NavLink className="nav-link" to='/cart'>
-                Cart
+                <FontAwesomeIcon icon={faCartShopping} />
               </NavLink>
             </li>
           </>

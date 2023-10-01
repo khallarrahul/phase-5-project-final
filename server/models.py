@@ -13,6 +13,11 @@ class User(db.Model, SerializerMixin):
         "reviews.rating",
         "order_history.id",
         "cart_items.id",
+        "first_name",
+        "last_name",
+        "address",
+        "payment_card",
+        "id",
     )
 
     id = db.Column(db.Integer, primary_key=True)

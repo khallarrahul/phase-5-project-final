@@ -6,16 +6,16 @@ function Checkout() {
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
-    email: '',
     address: '',
     payment_card: '',
-    cvv: '',
   });
   const [totalPrice, setTotalPrice] = useState(0);
 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    
     setFormData({ ...formData, [name]: value });
   };
 
@@ -24,19 +24,49 @@ function Checkout() {
     console.log('Checkout form submitted with data:', formData);
   };
 
+  
+  
+
   useEffect(() => {
-    axios.get('/cart/user') 
-      .then(response => {
+    axios
+      .get('/check_session')
+      .then((response) => {
+        const user = response.data;
+        if (user.id) {
+          axios.get(`/users/${user.id}`).then((userData) => {
+            const {
+              first_name,
+              last_name,
+              address,
+              payment_card,
+            } = userData.data;
+
+            setFormData({
+              ...formData,
+              first_name,
+              last_name,
+              address,
+              payment_card,
+            });
+          });
+        }
+      })
+      .catch((error) => {
+        console.error('Error checking session:', error);
+      });
+    axios
+      .get('/cart/user')
+      .then((response) => {
         const cartItems = response.data.cart_items;
         const totalPrice = cartItems.reduce((total, item) => {
           return total + item.product.price * item.quantity;
         }, 0);
         setTotalPrice(totalPrice);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('Error fetching cart items:', error);
       });
-  }, []);
+  }, [formData]);
 
   function handleShipping(totalPrice){
     if (totalPrice === 0){
@@ -83,75 +113,44 @@ function Checkout() {
     <div className="col-12 col-md-5 col-sm-6 signup-form">
       <div>
         <h2>Checkout Form</h2>
-        <form onSubmit={handleSubmit}>
-              <div>
-                <label htmlFor="first_name" className="form-label">First Name:</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="first_name"
-                  name="first_name"
-                  value={formData.first_name}
-                  onChange={handleChange}
-                  required
-                />
+        <br></br>
+        <br></br>
+        <div className='card user-info'>
+      
+          <div className="card-body">
+            <h2 className="card-title">User Information</h2>
+            <div className="card-text">
+            <br></br>
+                <p>
+                  <span className="black-text">First Name:</span>
+                  <span style={{ color: 'blue', float: 'right' }}>{formData.first_name}</span>
+                </p>
+                <p>
+                  <span className="black-text">Last Name:</span>
+                  <span style={{ color: 'blue', float: 'right' }}>{formData.last_name}</span>
+                </p>
+                <p>
+                  <span className="black-text">Address:</span>
+                  <span style={{ color: 'blue', float: 'right' }}>{formData.address}</span>
+                </p>
+                <p>
+                  <span className="black-text">Card Number:</span>
+                  <span style={{ color: 'blue', float: 'right' }}>{formData.payment_card}</span>
+                </p>
+            </div>
               </div>
-              <div>
-                <label htmlFor="last_name" className="form-label">Last Name:</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="last_name"
-                  name="last_name"
-                  value={formData.last_name}
-                  onChange={handleChange}
-                  required
-                />
               </div>
+              <form onSubmit={handleSubmit}>
+              <br></br>
               <div>
-                <label htmlFor="email" className="form-label">Email:</label>
-                <input
-                  type="email"
-                  className="form-control"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div>
-                <label htmlFor="address" className="form-label">Address:</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="address"
-                  name="address"
-                  value={formData.address}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div>
-                <label htmlFor="payment_card" className="form-label">Card Number:</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="payment_card"
-                  name="payment_card"
-                  value={formData.payment_card}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div>
-                <label htmlFor="cvv" className="form-label">CVV:</label>
+                <label className="form-label">CVV:</label>
                 <input
                   type="text"
                   className="form-control"
                   id="cvv"
-                  name="cvv"
-                  value={formData.cvv}
+                  name="cvv" 
+                  inputMode="numeric"
+                  maxLength="3" 
                   onChange={handleChange}
                   required
                 />

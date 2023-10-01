@@ -30,10 +30,7 @@ function Login({onLogin}) {
         const userData = {name : loginData.username}
         onLogin(userData)
         history.push('/');
-  
-        // Login successful, redirect to a protected route or dashboard
       } else {
-        // Handle login error, e.g., display an error message
         console.error('Login failed');
       }
     } catch (error) {

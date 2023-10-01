@@ -5,7 +5,6 @@ function Cart() {
   const [cartItems, setCartItems] = useState([]);
 
   useEffect(() => {
-    // Fetch cart items from your API
     fetch('/cart/user', {
       method: 'GET',
       headers: {

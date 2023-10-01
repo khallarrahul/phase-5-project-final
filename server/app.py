@@ -160,7 +160,7 @@ class CartItems(Resource):
             return make_response(jsonify({"message": "Not logged in"}), 401)
 
         user_id = session["user_id"]
-        quantity = request.json.get("quantity", 1)  # Default to 1 if not specified
+        quantity = request.json.get("quantity", 1)
 
         product = Product.query.get(product_id)
 

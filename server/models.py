@@ -154,4 +154,4 @@ class CartItem(db.Model, SerializerMixin):
     user = db.relationship("User", back_populates="cart_items")
 
     def __repr__(self):
-        return f"<CartItem(id={self.id}, item_name='{self.item_name}')>"
+        return f"<CartItem(id={self.id}>"

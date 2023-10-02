@@ -1,10 +1,24 @@
-import React from 'react';
-import { NavLink} from 'react-router-dom';
+import React, {useState} from 'react';
+import { NavLink, useHistory} from 'react-router-dom';
 import './NavBar.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
 
-function NavBar({user, onLogout}) {
+function NavBar({user, onLogout, onSearch}) {
+  const [searchTerm, setSearchTerm] = useState('');
+  const history = useHistory()
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleSearchSubmit = (e) => {
+    history.push('/')
+    e.preventDefault();
+    onSearch(searchTerm);
+    setSearchTerm('')
+  };
+
 
 
   return (
@@ -13,6 +27,22 @@ function NavBar({user, onLogout}) {
       <NavLink className="navbar-brand" to="/">
         <b>SELL-IT-LIKE-PRO</b>
       </NavLink>
+      <form className="form-inline my-2 my-lg-0" onSubmit={handleSearchSubmit}>
+        <input
+          className="form-control mr-sm-2"
+          type="search"
+          placeholder="Search"
+          aria-label="Search"
+          value={searchTerm}
+          onChange={handleSearchChange}
+        />
+        <button
+          className="btn btn-outline-info my-2 my-sm-0"
+          type="submit"
+        >
+          Search
+        </button>
+      </form>
       <button
         className="navbar-toggler"
         type="button"

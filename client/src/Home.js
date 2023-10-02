@@ -3,19 +3,28 @@ import './Home.css';
 import { NavLink , useHistory} from 'react-router-dom';
 import Carousel from './Carousel';
 
-function Home() {
+function Home({searchQuery}) {
   const [products, setProducts] = useState([]);
   const [addedToCart, setAddedToCart] = useState({});
   const [quantity, setQuantity] = useState(1);
   const history = useHistory()
 
+
   useEffect(() => {
     fetch('/products')
       .then((res) => res.json())
       .then((data) => {
-        setProducts(data.products);
+        if (searchQuery) {
+          // Filter products based on the search query
+          const filteredProducts = data.products.filter((product) =>
+            product.title.toLowerCase().includes(searchQuery.toLowerCase())
+          );
+          setProducts(filteredProducts);
+        } else {
+          setProducts(data.products);
+        }
       });
-  }, []);
+  }, [searchQuery]);
 
 
   const addToCart = (productId, quantity) => {

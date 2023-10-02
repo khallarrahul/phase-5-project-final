@@ -11,6 +11,7 @@ import Checkout from './Checkout';
 
 function App() {
   const [user, setUser] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     fetch("/check_session").then((response) => {
@@ -22,6 +23,10 @@ function App() {
 
   const handleLogin = (userData) => {
     setUser(userData);
+  };
+
+  const handleSearch = (query) => {
+    setSearchQuery(query);
   };
 
   function handleLogout() {
@@ -45,10 +50,10 @@ function App() {
 
   return (
     <div id="content-wrapper">
-      <NavBar user={user} onLogout={handleLogout} />
+      <NavBar user={user} onLogout={handleLogout} onSearch={handleSearch} />
       <Switch>
         <Route exact path="/">
-          <Home />
+          <Home searchQuery={searchQuery} />
         </Route>
         <Route path="/login">
           <Login onLogin={handleLogin} />

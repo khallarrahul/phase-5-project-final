@@ -2,8 +2,10 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 
 function Carousel() {
+
+    
   return (
-    <div id="carouselExampleIndicators" className="carousel slide" data-ride="carousel">
+    <div id="carouselExampleIndicators" className="carousel slide" data-ride="carousel" data-interval="4000">
       <ol className="carousel-indicators">
         <li data-target="#carouselExampleIndicators" data-slide-to="0" className="active"></li>
         <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>

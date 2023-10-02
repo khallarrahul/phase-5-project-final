@@ -134,6 +134,8 @@ class User_By_Id(Resource):
             try:
                 CartItem.query.filter_by(user_id=id).delete()
 
+                Review.query.filter_by(user_id=id).delete()
+
                 db.session.delete(user_by_id)
                 db.session.commit()
                 return make_response(

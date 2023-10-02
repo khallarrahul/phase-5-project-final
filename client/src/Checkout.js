@@ -42,7 +42,7 @@ function Checkout() {
             } = userData.data;
 
             setFormData({
-              ...formData,
+              // ...formData,
               first_name,
               last_name,
               address,
@@ -66,7 +66,7 @@ function Checkout() {
       .catch((error) => {
         console.error('Error fetching cart items:', error);
       });
-  }, [formData]);
+  }, []);   //formData was inside the parenthesis so it was running infinite get requests form server
 
   function handleShipping(totalPrice){
     if (totalPrice === 0){

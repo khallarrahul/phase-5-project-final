@@ -2,7 +2,7 @@ from flask import Flask, jsonify, make_response, request, session, redirect, url
 from flask_restful import Resource
 from sqlalchemy.exc import IntegrityError
 from flask_sqlalchemy import SQLAlchemy  # Import SQLAlchemy
-from models import Product, User, CartItem, Review
+from models import Product, User, CartItem, Review, OrderHistory
 from config import app, db, api
 import bcrypt
 import logging
@@ -267,6 +267,54 @@ class ReviewsByProductId(Resource):
 
 
 api.add_resource(ReviewsByProductId, "/reviews/<int:product_id>")
+
+
+class OrderHistoryResource(Resource):
+    def get(self):
+        get_all_history = OrderHistory.query.all()
+        all_history_dict = [history.to_dict() for history in get_all_history]
+        return make_response(jsonify(all_history_dict), 200)
+
+
+api.add_resource(OrderHistoryResource, "/order_history")
+
+
+class PlaceOrder(Resource):
+    def post(self):
+        if not session.get("user_id"):
+            return make_response(jsonify({"message": "Not logged in"}), 401)
+
+        user_id = session["user_id"]
+
+        cart_items = CartItem.query.filter_by(user_id=user_id).all()
+
+        if not cart_items:
+            return make_response(jsonify({"message": "Cart is empty"}), 400)
+
+        try:
+            for cart_item in cart_items:
+                order_history = OrderHistory(
+                    user_id=user_id,
+                    product_id=cart_item.product_id,
+                    quantity=cart_item.quantity,
+                    order_status=True,
+                )
+                db.session.add(order_history)
+
+            CartItem.query.filter_by(user_id=user_id).delete()
+
+            db.session.commit()
+
+            return make_response(jsonify({"message": "Order placed successfully"}), 201)
+
+        except Exception as e:
+            db.session.rollback()
+            return make_response(
+                {"message": "Error placing order", "error": str(e)}, 500
+            )
+
+
+api.add_resource(PlaceOrder, "/place_order")
 
 
 @app.route("/login", methods=["POST"])

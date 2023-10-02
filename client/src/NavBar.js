@@ -37,7 +37,7 @@ function NavBar({user, onLogout, onSearch}) {
           onChange={handleSearchChange}
         />
         <button
-          className="btn btn-outline-info my-2 my-sm-0"
+          className="btn btn-outline-primary"
           type="submit"
         >
           Search

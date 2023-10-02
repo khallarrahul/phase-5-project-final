@@ -42,26 +42,6 @@ function Cart() {
       });
   };
 
-  const handleCheckout = () => {
-
-    fetch('/checkout', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => {
-        if (response.status === 201) {
-
-        } else {
-          console.error('Failed to initiate checkout');
-        }
-      })
-      .catch((error) => {
-        console.error('Error initiating checkout', error);
-      });
-  };
-
   return (
     <div>
       <h1>Your Cart</h1>
@@ -84,7 +64,7 @@ function Cart() {
       <div>
         <h2>Total Price: ${totalPrice.toFixed(2)}</h2>
         <NavLink to='/checkout'>
-              <button className='btn btn-primary' onClick={handleCheckout}>
+              <button className='btn btn-primary'>
                 Checkout
               </button>
             </NavLink>

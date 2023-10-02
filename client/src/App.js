@@ -8,6 +8,7 @@ import Cart from './Cart';
 import Product from './Product';
 import { Switch, Route } from 'react-router-dom';
 import Checkout from './Checkout';
+import OrderHistory from './OrderHistory';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -69,6 +70,9 @@ function App() {
         </Route>
         <Route path='/product/:productId'>
           <Product />
+        </Route>
+        <Route path='/order_history'>
+          <OrderHistory/>
         </Route>
         <Route>
           <h1>The page you are looking for does not exist</h1>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {NavLink} from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 function Cart() {
   const [cartItems, setCartItems] = useState([]);
@@ -43,31 +43,46 @@ function Cart() {
   };
 
   return (
-    <div>
-      <h1>Your Cart</h1>
-      <ul>
+    <div className='row justify-content-center'>
+      <div className='row row-cols-1 row-cols-ml-3 g-4 py-5'>
+        <h1 className='col-12'>Your Cart</h1>
+
         {cartItems.map((item) => (
-          <li key={item.id}>
-            <div>{item.product.title}</div>
-            <img src={item.product.image} alt={item.product.title} />
-            <div>Quantity: {item.quantity}</div>
-            <div>Price: ${item.product.price}</div>
-            <button
-              className='btn btn-primary'
-              onClick={() => handleDeleteItem(item.id)}
-            >
-              Delete
-            </button>
-          </li>
+          <div key={item.id} className='col-md-4 mb-4'>
+                    <img
+                      src={item.product.image}
+                      className='card-img-top'
+                      alt={item.product.title}
+                      style={ {'width': '500px'}} // Add margin-right to create space
+                    />
+            <div className='card'>
+              <div className='card-body'>
+                <div className='row'>
+                  <div className='col-md-4'>
+                  </div>
+                  <div className='col-md-8'>
+                    <h5 className='card-title'>{item.product.title}</h5>
+                    <p className='card-text'>Quantity: {item.quantity}</p>
+                    <p className='card-text'>Price: ${item.product.price}</p>
+                    <button
+                      className='btn btn-danger'
+                      onClick={() => handleDeleteItem(item.id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         ))}
-      </ul>
-      <div>
-        <h2>Total Price: ${totalPrice.toFixed(2)}</h2>
-        <NavLink to='/checkout'>
-              <button className='btn btn-primary'>
-                Checkout
-              </button>
-            </NavLink>
+
+        <div>
+          <h2>Total Price: ${totalPrice.toFixed(2)}</h2>
+          <NavLink to='/checkout'>
+            <button className='btn btn-primary'>Checkout</button>
+          </NavLink>
+        </div>
       </div>
     </div>
   );

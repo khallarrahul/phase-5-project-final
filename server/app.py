@@ -272,9 +272,15 @@ api.add_resource(ReviewsByProductId, "/reviews/<int:product_id>")
 
 class OrderHistoryResource(Resource):
     def get(self):
-        get_all_history = OrderHistory.query.all()
-        all_history_dict = [history.to_dict() for history in get_all_history]
-        return make_response(jsonify(all_history_dict), 200)
+        if not session.get("user_id"):
+            return make_response(jsonify({"message": "Not logged in"}), 401)
+
+        user_id = session["user_id"]
+
+        get_user_history = OrderHistory.query.filter_by(user_id=user_id).all()
+        user_history_dict = [history.to_dict() for history in get_user_history]
+
+        return make_response(jsonify(user_history_dict), 200)
 
 
 api.add_resource(OrderHistoryResource, "/order_history")

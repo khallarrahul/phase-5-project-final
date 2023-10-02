@@ -67,6 +67,11 @@ function NavBar({user, onLogout, onSearch}) {
               </NavLink>
             </li>
             <li className="nav-item">
+              <NavLink className="nav-link" to='/order_history'>
+                Your Orders
+              </NavLink>
+            </li>
+            <li className="nav-item">
               <NavLink className="nav-link" to='/cart'>
                 <FontAwesomeIcon icon={faCartShopping} />
               </NavLink>

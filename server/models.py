@@ -3,6 +3,7 @@ from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.orm import validates
 from config import db, bcrypt
 from sqlalchemy.ext.hybrid import hybrid_property
+from datetime import datetime
 
 
 class User(db.Model, SerializerMixin):
@@ -125,7 +126,7 @@ class OrderHistory(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     quantity = db.Column(db.Integer)
-    order_date = db.Column(db.DateTime, onupdate=db.func.now())
+    order_date = db.Column(db.DateTime, default=datetime.utcnow)
     order_status = db.Column(db.Boolean)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     product_id = db.Column(db.Integer, db.ForeignKey("products.id"), nullable=False)

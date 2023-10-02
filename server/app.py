@@ -135,12 +135,13 @@ class User_By_Id(Resource):
                 CartItem.query.filter_by(user_id=id).delete()
 
                 Review.query.filter_by(user_id=id).delete()
+                OrderHistory.query.filter_by(user_id=id).delete()
 
                 db.session.delete(user_by_id)
                 db.session.commit()
                 return make_response(
                     {
-                        "message": "The user, their cart items, and reviews have been deleted successfully"
+                        "message": "The user, their cart items, reviews and order_history have been deleted successfully"
                     },
                     200,
                 )

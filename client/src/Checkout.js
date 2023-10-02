@@ -97,11 +97,11 @@ function Checkout() {
           </p>
           <p className="card-text">
             <span className="black-text">GST/HST: </span>
-            <span style={{ color: 'blue', float: 'right'}}>${(totalPrice * 0.12)}</span>
+            <span style={{ color: 'blue', float: 'right'}}>${(totalPrice * 0.12).toFixed(2)}</span>
           </p>
           <p className="card-text">
             <span className="black-text">Total Before Tax: </span>
-            <span style={{ color: 'blue', float: 'right'}}>${(totalPrice + handleShipping(totalPrice))}</span>
+            <span style={{ color: 'blue', float: 'right'}}>${(totalPrice + handleShipping(totalPrice)).toFixed(2)}</span>
           </p>
           <p className="card-text">
             <span className="black-text">Grade Total: </span>

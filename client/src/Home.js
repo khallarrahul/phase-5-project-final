@@ -1,6 +1,7 @@
 import React, { useState, useEffect} from 'react';
 import './Home.css';
 import { NavLink , useHistory} from 'react-router-dom';
+import Carousel from './Carousel';
 
 function Home() {
   const [products, setProducts] = useState([]);
@@ -50,11 +51,11 @@ function Home() {
   return (
     <div>
       <div className='container py-5'>
-        <h1 className='text-center'>Products</h1>
+        <Carousel />
         <div className='row row-cols-1 row-cols-md-3 g-4 py-5'>
           {products.map((product) => (
-            <div className='col' key={product.id}>
-              <div className='card'>
+            <div className='col'  key={product.id}>
+              <div className='card' >
                 <NavLink to={`/product/${product.id}`} className='card-link'>
                   <img src={product.image} className='card-img-top' alt={product.title} />
                   <div className='card-body'>

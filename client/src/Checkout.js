@@ -10,7 +10,7 @@ function Checkout() {
     payment_card: '',
   });
   const [totalPrice, setTotalPrice] = useState(0);
-  const [cartItemsState, setCartItemsState] = useState([]); // Define cartItemsState
+  const [cartItemsState, setCartItemsState] = useState([]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -45,7 +45,6 @@ function Checkout() {
       .then((response) => {
         if (response.status === 201) {
           alert('Order placed successfully');
-          // You can also redirect to a confirmation page or perform other actions
         } else if (response.status === 401) {
           alert('Please log in to place an order');
         } else {
@@ -93,7 +92,7 @@ function Checkout() {
           return total + item.product.price * item.quantity;
         }, 0);
         setTotalPrice(totalPrice);
-        setCartItemsState(cartItems); // Set cart items to cartItemsState
+        setCartItemsState(cartItems);
       })
       .catch((error) => {
         console.error('Error fetching cart items:', error);
@@ -110,20 +109,30 @@ function Checkout() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    placeOrder(); // Call the placeOrder function here
+    if (
+      !formData.cardholder_name ||
+      !formData.card_number ||
+      !formData.expiration_date ||
+      !formData.cvv
+    ) {
+      alert('Please fill in all card details');
+      return; 
+    }
+    placeOrder();
   };
+  
 
   return (
     <div className="container mt-5">
       <div className="row">
         <div className="col-12 col-md-7 col-sm-6">
           <h1 className="checkout-title">Checkout</h1>
-          <br></br>
-          <br></br>
+          <br />
+          <br />
           <div className="card order">
             <div className="card-body">
               <h2 className="card-title">Order Review</h2>
-              <br></br>
+              <br />
               <p className="card-text">
                 <span className="black-text">Total Price: </span>
                 <span style={{ color: 'blue', float: 'right' }}>
@@ -161,71 +170,151 @@ function Checkout() {
             </div>
           </div>
         </div>
-        <div className="col-12 col-md-5 col-sm-6 signup-form">
-          <div>
-            <h2>Checkout Form</h2>
-            <br></br>
-            <br></br>
-            <div className="card user-info">
-              <div className="card-body">
-                <h2 className="card-title">User Information</h2>
-                <div className="card-text">
-                  <br></br>
+            <div className="col-lg-5">
+              <div className="card bg-primary text-white rounded-3">
+                <div className="card-body">
+                  <div className="d-flex justify-content-between align-items-center mb-4">
+                    <h1 className="mb-0">Card details</h1>
+                    <img
+                      src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp"
+                      className="img-fluid rounded-3"
+                      style={{ width: '45px' }}
+                      alt="Avatar"
+                    />
+                  </div>
                   <p>
                     <span className="black-text">First Name:</span>
-                    <span style={{ color: 'blue', float: 'right' }}>
+                    <span style={{ float: 'right' }}>
                       {formData.first_name}
                     </span>
                   </p>
                   <p>
                     <span className="black-text">Last Name:</span>
-                    <span style={{ color: 'blue', float: 'right' }}>
+                    <span style={{ float: 'right' }}>
                       {formData.last_name}
                     </span>
                   </p>
                   <p>
                     <span className="black-text">Address:</span>
-                    <span style={{ color: 'blue', float: 'right' }}>
+                    <span style={{ float: 'right' }}>
                       {formData.address}
                     </span>
                   </p>
-                  <p>
-                    <span className="black-text">Card Number:</span>
-                    <span style={{ color: 'blue', float: 'right' }}>
-                      {formData.payment_card}
-                    </span>
-                  </p>
+  
+                  <p className="small mb-2">Card type</p>
+                  <a href="#!" className="text-white">
+                    <i className="fab fa-cc-mastercard fa-2x me-2"></i>
+                  </a>
+                  <a href="#!" className="text-white">
+                    <i className="fab fa-cc-visa fa-2x me-2"></i>
+                  </a>
+                  <a href="#!" className="text-white">
+                    <i className="fab fa-cc-amex fa-2x me-2"></i>
+                  </a>
+                  <a href="#!" className="text-white">
+                    <i className="fab fa-cc-paypal fa-2x"></i>
+                  </a>
+  
+                  <form onSubmit={handleSubmit}>
+                    <div className="form-outline form-white mb-4">
+                      <input
+                        type="text"
+                        id="typeName"
+                        className="form-control form-control-lg"
+                        size="17"
+                        placeholder="Cardholder's Name"
+                        name="cardholder_name"
+                        value={formData.cardholder_name}
+                        onChange={handleChange}
+                        required
+                      />
+                      <label className="form-label" htmlFor="typeName">
+                        Cardholder's Name
+                      </label>
+                    </div>
+  
+                    <div className="form-outline form-white mb-4">
+                      <input
+                        type="text"
+                        id="typeText"
+                        className="form-control form-control-lg"
+                        size="17"
+                        placeholder="1234 5678 9012 3457"
+                        name="card_number"
+                        value={formData.card_number}
+                        onChange={handleChange}
+                        minLength="19"
+                        maxLength="19"
+                        required
+                      />
+                      <label className="form-label" htmlFor="typeText">
+                        Card Number
+                      </label>
+                    </div>
+  
+                    <div className="row mb-4">
+                      <div className="col-md-6">
+                        <div className="form-outline form-white">
+                          <input
+                            type="text"
+                            id="typeExp"
+                            className="form-control form-control-lg"
+                            placeholder="MM/YYYY"
+                            size="7"
+                            name="expiration_date"
+                            value={formData.expiration_date}
+                            onChange={handleChange}
+                            minLength="7"
+                            maxLength="7"
+                            required
+                          />
+                          <label className="form-label" htmlFor="typeExp">
+                            Expiration
+                          </label>
+                        </div>
+                      </div>
+                      <div className="col-md-6">
+                        <div className="form-outline form-white">
+                          <input
+                            type="password"
+                            id="typeText"
+                            className="form-control form-control-lg"
+                            placeholder="&#9679;&#9679;&#9679;"
+                            size="1"
+                            name="cvv"
+                            value={formData.cvv}
+                            onChange={handleChange}
+                            minLength="3"
+                            maxLength="3"
+                            required
+                          />
+                          <label className="form-label" htmlFor="typeText">
+                            CVV
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+  
+                    <button
+                      type="submit"
+                      className="btn btn-secondary"
+                      onClick={placeOrder}
+                      disabled={
+                        !formData.cardholder_name ||
+                        !formData.card_number ||
+                        !formData.expiration_date ||
+                        !formData.cvv
+                      }
+                    >
+                      Place Your Order
+                    </button>
+                  </form>
                 </div>
               </div>
             </div>
-            <form onSubmit={handleSubmit}>
-              <br></br>
-              <div>
-                <label className="form-label">CVV:</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="cvv"
-                  name="cvv"
-                  inputMode="numeric"
-                  maxLength="3"
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <br></br>
-              <button
-                type="submit"
-                className="btn btn-secondary"
-                onSubmit={placeOrder} // Call the placeOrder function on button click
-              >
-                Place Your Order
-              </button>
-            </form>
           </div>
         </div>
-      </div>
-    </div>
+
   );
 }
 

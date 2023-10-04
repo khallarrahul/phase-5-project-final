@@ -4,4 +4,8 @@
     overflow-y: auto;
     padding: 20px; /* Optional: Add padding for better styling */
   }
-  
+  .error-message {
+    color: red; /* Set the error message text color to red */
+    font-size: 14px; /* Adjust the font size as needed */
+    margin-top: 5px; /* Add some margin for spacing */
+  }

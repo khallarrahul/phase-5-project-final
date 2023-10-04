@@ -63,7 +63,6 @@ class Users(Resource):
     def post(self):
         data = request.get_json()
 
-        # Remove leading and trailing whitespaces from data values
         cleaned_data = {
             key: value.strip() if isinstance(value, str) else value
             for key, value in data.items()
@@ -73,7 +72,6 @@ class Users(Resource):
         if len(errors) > 0:
             return {"errors": errors}, 422
         try:
-            # Now use cleaned_data instead of data for further processing
             first_name = cleaned_data.get("first_name")
             last_name = cleaned_data.get("last_name")
             email = cleaned_data.get("email")

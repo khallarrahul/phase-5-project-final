@@ -51,7 +51,7 @@ function Login({onLogin}) {
                 className="form-control"
                 id="username"
                 name="username"
-                value={loginData.username} // Set value to loginData.username
+                value={loginData.username}
                 onChange={handleChange}
                 required
               />
@@ -61,7 +61,7 @@ function Login({onLogin}) {
                 className="form-control"
                 id="password"
                 name="password"
-                value={loginData.password} // Set value to loginData.password
+                value={loginData.password}
                 onChange={handleChange}
                 required
               />

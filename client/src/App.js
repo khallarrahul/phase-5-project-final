@@ -6,7 +6,7 @@ import Signup from './Signup';
 import NavBar from './NavBar';
 import Cart from './Cart';
 import Product from './Product';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route} from 'react-router-dom';
 import Checkout from './Checkout';
 import OrderHistory from './OrderHistory';
 

@@ -90,7 +90,6 @@ function Product() {
     })
       .then((res) => {
         if (res.status === 201) {
-          // Review posted successfully, fetch and update reviews
           fetch(`/reviews/${productId}`)
             .then((res) => {
               if (res.status === 200) {

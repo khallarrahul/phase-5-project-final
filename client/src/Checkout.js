@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import {NavLink} from 'react-router-dom'
 import './Checkout.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 
 function Checkout() {
   const [formData, setFormData] = useState({
@@ -175,12 +178,7 @@ function Checkout() {
                 <div className="card-body">
                   <div className="d-flex justify-content-between align-items-center mb-4">
                     <h1 className="mb-0">Card details</h1>
-                    <img
-                      src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp"
-                      className="img-fluid rounded-3"
-                      style={{ width: '45px' }}
-                      alt="Avatar"
-                    />
+                    <FontAwesomeIcon icon={faUser} />
                   </div>
                   <p>
                     <span className="black-text">First Name:</span>
@@ -202,21 +200,21 @@ function Checkout() {
                   </p>
   
                   <p className="small mb-2">Card type</p>
-                  <a href="#!" className="text-white">
+                  <NavLink to="#!" className="text-white">
                     <i className="fab fa-cc-mastercard fa-2x me-2"></i>
-                  </a>
-                  <a href="#!" className="text-white">
+                  </NavLink>
+                  <NavLink to="#!" className="text-white">
                     <i className="fab fa-cc-visa fa-2x me-2"></i>
-                  </a>
-                  <a href="#!" className="text-white">
+                  </NavLink>
+                  <NavLink to="#!" className="text-white">
                     <i className="fab fa-cc-amex fa-2x me-2"></i>
-                  </a>
-                  <a href="#!" className="text-white">
+                  </NavLink>
+                  <NavLink to="#!" className="text-white">
                     <i className="fab fa-cc-paypal fa-2x"></i>
-                  </a>
+                  </NavLink>
   
-                  <form onSubmit={handleSubmit}>
-                    <div className="form-outline form-white mb-4">
+                  <form className="mt-4" onSubmit={handleSubmit}>
+                    <div className="form-group mb-4">
                       <input
                         type="text"
                         id="typeName"
@@ -233,7 +231,7 @@ function Checkout() {
                       </label>
                     </div>
   
-                    <div className="form-outline form-white mb-4">
+                    <div className="form-group mb-4">
                       <input
                         type="text"
                         id="typeText"
@@ -254,7 +252,7 @@ function Checkout() {
   
                     <div className="row mb-4">
                       <div className="col-md-6">
-                        <div className="form-outline form-white">
+                        <div className="form-group mb-4">
                           <input
                             type="text"
                             id="typeExp"
@@ -274,7 +272,7 @@ function Checkout() {
                         </div>
                       </div>
                       <div className="col-md-6">
-                        <div className="form-outline form-white">
+                        <div className="form-group mb-4">
                           <input
                             type="password"
                             id="typeText"
@@ -300,8 +298,8 @@ function Checkout() {
                       className="btn btn-secondary"
                       onClick={placeOrder}
                       disabled={
-                        !formData.cardholder_name ||
-                        !formData.card_number ||
+                        !/^[A-Za-z\s]+$/.test(formData.cardholder_name) ||
+                        !/^[0-9]+$/.test(formData.card_number) ||
                         !formData.expiration_date ||
                         !formData.cvv
                       }

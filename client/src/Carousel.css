@@ -1,0 +1,7 @@
+.d-block {
+    transition: transform 0.2s;
+}
+
+.d-block:hover{
+    transform: scale(1.1)
+}

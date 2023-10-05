@@ -20,6 +20,16 @@ function Cart() {
       });
   }, []);
 
+  function wordCountLimiter(title, limit) {
+    const words = title.split(' ');
+    if (words.length <= limit) {
+      return title;
+    } else {
+      return words.slice(0, limit).join(' ') + '...';
+    }
+  }
+  
+
   const calculateTotalPrice = (items) => {
     const total = items.reduce((total, item) => {
       return total + item.product.price * item.quantity;
@@ -84,7 +94,7 @@ function Cart() {
                         <div>
                           <p className="small text-muted mb-4 pb-2">Name</p>
                           <p className="lead fw-normal mb-0">
-                            {item.product.title}
+                            {wordCountLimiter(item.product.title, 2)}
                           </p>
                         </div>
                       </div>

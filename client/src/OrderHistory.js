@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
-function OrderHistory() {
+function OrderHistory({wordCountLimiter}) {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
@@ -17,15 +17,6 @@ function OrderHistory() {
     const month = String(dateObject.getMonth() + 1).padStart(2, '0');
     const day = String(dateObject.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
-  }
-
-  function wordCountLimiter(description) {
-    const words = description.split(' ');
-    if (words.length <= 9) {
-      return description;
-    } else {
-      return words.slice(0, 9).join(' ') + '...';
-    }
   }
 
   return (

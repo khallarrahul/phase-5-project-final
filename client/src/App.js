@@ -49,6 +49,15 @@ function App() {
       });
   }
 
+  function wordCountLimiter(description) {
+    const words = description.split(' ');
+    if (words.length <= 9) {
+      return description;
+    } else {
+      return words.slice(0, 9).join(' ') + '...';
+    }
+  }
+
   return (
     <div id="content-wrapper">
       <NavBar user={user} onLogout={handleLogout} onSearch={handleSearch} />
@@ -63,7 +72,7 @@ function App() {
           <Signup />
         </Route>
         <Route path='/cart'>
-          <Cart />
+          <Cart wordCountLimiter={wordCountLimiter}/>
         </Route>
         <Route path="/checkout">
           <Checkout />
@@ -72,7 +81,7 @@ function App() {
           <Product />
         </Route>
         <Route path='/order_history'>
-          <OrderHistory/>
+          <OrderHistory wordCountLimiter={wordCountLimiter}/>
         </Route>
         <Route>
           <h1>The page you are looking for does not exist</h1>

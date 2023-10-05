@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { NavLink, useHistory } from 'react-router-dom';
 
-function Login({onLogin}) {
+function Login({ onLogin }) {
   const [loginData, setLoginData] = useState({
     username: '',
     password: ''
   });
+
+  const [error, setError] = useState(null); // State to store login error message
 
   const history = useHistory();
 
@@ -27,11 +29,11 @@ function Login({onLogin}) {
       });
 
       if (response.ok) {
-        const userData = {name : loginData.username}
-        onLogin(userData)
+        const userData = { name: loginData.username };
+        onLogin(userData);
         history.push('/');
       } else {
-        console.error('Login failed');
+        setError('Username or password incorrect');
       }
     } catch (error) {
       console.error('Login failed:', error);
@@ -65,6 +67,7 @@ function Login({onLogin}) {
                 onChange={handleChange}
                 required
               />
+              {error && <div className="text-danger">{error}</div>} 
               <br></br>
               <button type="submit" className="btn btn-primary">
                 Login

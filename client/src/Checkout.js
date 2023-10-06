@@ -5,6 +5,7 @@ import './Checkout.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 
+
 function Checkout() {
   const [formData, setFormData] = useState({
     first_name: '',

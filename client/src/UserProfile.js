@@ -212,13 +212,7 @@ function UserProfile({handleLogout}) {
                     </button>
                   ) : (
                     <>
-                      <button 
-                        className="btn btn-danger me-2"
-                        type="button"
-                        onClick={handleDeleteProfile}
-                        >       
-                        DELETE PROFILE
-                      </button>
+                    <div className='d-flex justify-content-around'>
                       <button
                         className="btn btn-primary me-2"
                         type="button"
@@ -233,6 +227,14 @@ function UserProfile({handleLogout}) {
                       >
                         Cancel
                       </button>
+                      <button 
+                        className="btn btn-danger me-2"
+                        type="button"
+                        onClick={handleDeleteProfile}
+                        >       
+                        DELETE PROFILE
+                      </button>
+                      </div>
                     </>
                   )}
                 </form>

@@ -49,25 +49,19 @@ function OrderHistory({wordCountLimiter}) {
                       alt={order.product.brand}
                       style={{ height: '100px', width: '100px' }}
                     />
-                    <h1 style={{ fontSize: '24px', width: '650px' }}>
+                    <h1 style={{ fontSize: '24px', width: '650px'}}>
                       {wordCountLimiter(order.product.description)}
                     </h1>
                   </div>
                   <div className="d-flex justify-content-between">
                     <p className="card-text">
-                      Quantity:{' '}
+                      Units:{' '}
                       <h1 style={{ fontSize: '18px' }}>{order.quantity}</h1>
                     </p>
                     <p className="card-text">
-                      Total Price:{' '}
+                      Price:{' '}
                       <h1 style={{ fontSize: '18px' }}>
                         ${(order.quantity) * (order.product.price)}
-                      </h1>
-                    </p>
-                    <p className="card-text">
-                      Ship to:{' '}
-                      <h1 style={{ fontSize: '18px' }}>
-                        {order.user.first_name} {order.user.last_name}
                       </h1>
                     </p>
                     <p className="card-text">

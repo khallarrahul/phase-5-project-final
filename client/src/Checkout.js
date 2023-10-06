@@ -271,7 +271,6 @@ function Checkout() {
                         <div className="form-group mb-4">
                           <input
                             type="password"
-                            id="typeText"
                             className="form-control form-control-lg"
                             placeholder="&#9679;&#9679;&#9679;"
                             name="cvv"
@@ -290,7 +289,6 @@ function Checkout() {
                     <button
                       type="submit"
                       className="btn btn-secondary"
-                      onClick={placeOrder}
                       disabled={
                         !/^[A-Za-z\s]+$/.test(formData.cardholder_name) ||
                         !/^[0-9]+$/.test(formData.card_number) ||

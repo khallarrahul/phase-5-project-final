@@ -7,7 +7,15 @@ function OrderHistory({wordCountLimiter}) {
   useEffect(() => {
     fetch('/order_history')
       .then((res) => res.json())
-      .then((orders) => setOrders(orders))
+      .then((orders) => {
+        orders.sort((a, b) => {
+          const dateA = new Date(a.order_date);
+          const dateB = new Date(b.order_date);
+          return dateB - dateA;
+        });
+
+        setOrders(orders);
+      })
       .catch((error) => console.error('Error fetching data:', error));
   }, []);
 

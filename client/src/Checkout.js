@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import {NavLink} from 'react-router-dom'
+import {NavLink, useHistory} from 'react-router-dom'
 import './Checkout.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
@@ -14,6 +14,7 @@ function Checkout() {
   });
   const [totalPrice, setTotalPrice] = useState(0);
   const [cartItemsState, setCartItemsState] = useState([]);
+  const history = useHistory()
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -48,6 +49,7 @@ function Checkout() {
       .then((response) => {
         if (response.status === 201) {
           alert('Order placed successfully');
+          history.push('/order_history')
         } else if (response.status === 401) {
           alert('Please log in to place an order');
         } else {

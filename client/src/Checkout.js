@@ -236,12 +236,10 @@ function Checkout() {
                         type="text"
                         id="typeText"
                         className="form-control form-control-lg"
-                        size="17"
                         placeholder="1234 5678 9012 3457"
                         name="card_number"
                         value={formData.card_number}
                         onChange={handleChange}
-                        minLength="19"
                         maxLength="19"
                         required
                       />
@@ -258,11 +256,9 @@ function Checkout() {
                             id="typeExp"
                             className="form-control form-control-lg"
                             placeholder="MM/YYYY"
-                            size="7"
                             name="expiration_date"
                             value={formData.expiration_date}
                             onChange={handleChange}
-                            minLength="7"
                             maxLength="7"
                             required
                           />
@@ -278,11 +274,9 @@ function Checkout() {
                             id="typeText"
                             className="form-control form-control-lg"
                             placeholder="&#9679;&#9679;&#9679;"
-                            size="1"
                             name="cvv"
                             value={formData.cvv}
                             onChange={handleChange}
-                            minLength="3"
                             maxLength="3"
                             required
                           />

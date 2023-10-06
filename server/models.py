@@ -60,11 +60,9 @@ class User(db.Model, SerializerMixin):
 
     @password_hash.setter
     def password_hash(self, password):
-        # Generate a password hash and store it
         self._password_hash = bcrypt.generate_password_hash(password).decode("utf-8")
 
     def check_password(self, password):
-        # Check the provided password against the stored password hash
         return bcrypt.check_password_hash(self._password_hash, password)
 
 

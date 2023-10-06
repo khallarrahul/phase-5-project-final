@@ -90,7 +90,7 @@ function Home({ searchQuery }) {
                         type='number'
                         min='1'
                         max='10'
-                        className='form-control form-control-sm'
+                        className='form-control'
                         defaultValue='1'
                         value={product.quantity}
                         onChange={(e) => {

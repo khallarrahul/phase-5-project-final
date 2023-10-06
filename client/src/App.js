@@ -86,7 +86,7 @@ function App() {
           <OrderHistory wordCountLimiter={wordCountLimiter}/>
         </Route>
         <Route path='/profile'>
-          <UserProfile/>
+          <UserProfile handleLogout={handleLogout}/>
         </Route>
         <Route>
           <h1>The page you are looking for does not exist</h1>

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import './UserProfile.css';
 import { useHistory } from 'react-router-dom';
 
-function UserProfile() {
+function UserProfile({handleLogout}) {
   const [user, setUser] = useState(null);
   const [address, setAddress] = useState('');
   const [paymentCard, setPaymentCard] = useState('');
@@ -42,6 +42,7 @@ function UserProfile() {
       })
         .then((response) => {
           if (response.status === 200) {
+            handleLogout()
             history.push('/');
           } else {
             console.error('Failed to delete user profile');

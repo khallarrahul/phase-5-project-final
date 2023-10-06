@@ -29,7 +29,7 @@ function Carousel() {
           <NavLink to='/product/13'>
             <img
               className="d-block w-100"
-              src="https://pbs.twimg.com/media/EFAnXGnWwAchHC1.jpg"
+              src="https://images.pexels.com/photos/11265021/pexels-photo-11265021.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
               alt="Second slide"
               style={{ height: '450px' }} 
             />

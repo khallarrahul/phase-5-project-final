@@ -9,6 +9,8 @@ import Product from './Product';
 import { Switch, Route} from 'react-router-dom';
 import Checkout from './Checkout';
 import OrderHistory from './OrderHistory';
+import UserProfile from './UserProfile';
+
 
 function App() {
   const [user, setUser] = useState(null);
@@ -82,6 +84,9 @@ function App() {
         </Route>
         <Route path='/order_history'>
           <OrderHistory wordCountLimiter={wordCountLimiter}/>
+        </Route>
+        <Route path='/profile'>
+          <UserProfile/>
         </Route>
         <Route>
           <h1>The page you are looking for does not exist</h1>

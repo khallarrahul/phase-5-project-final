@@ -19,6 +19,9 @@ class User(db.Model, SerializerMixin):
         "address",
         "payment_card",
         "id",
+        "email",
+        "username",
+        "phone_number",
     )
 
     id = db.Column(db.Integer, primary_key=True)

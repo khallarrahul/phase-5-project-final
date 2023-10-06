@@ -56,7 +56,9 @@ function NavBar({ user, onLogout, onSearch }) {
             {user ? (
               <>
                 <li className="nav-item">
-                  <span className="nav-link">Welcome {user.name}</span>
+                  <NavLink className="nav-link" to="/profile">
+                    Welcome {user.name}
+                  </NavLink>
                 </li>
                 <li className="nav-item">
                   <NavLink className="nav-link" onClick={onLogout} to="/login">

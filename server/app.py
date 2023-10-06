@@ -117,44 +117,6 @@ class Users(Resource):
 api.add_resource(Users, "/users")
 
 
-class User_By_Id(Resource):
-    def get(self, id):
-        user_by_id = User.query.get(id)
-        if user_by_id is not None:
-            user_dict = user_by_id.to_dict()
-            return make_response(jsonify(user_dict), 200)
-        else:
-            return make_response({"message": "User not found"}, 404)
-
-    def delete(self, id):
-        user_by_id = User.query.get(id)
-        if user_by_id:
-            try:
-                CartItem.query.filter_by(user_id=id).delete()
-
-                Review.query.filter_by(user_id=id).delete()
-                OrderHistory.query.filter_by(user_id=id).delete()
-
-                db.session.delete(user_by_id)
-                db.session.commit()
-                return make_response(
-                    {
-                        "message": "The user, their cart items, reviews and order_history have been deleted successfully"
-                    },
-                    200,
-                )
-            except Exception as e:
-                db.session.rollback()
-                return make_response(
-                    {"message": "Error deleting user", "error": str(e)}, 500
-                )
-        else:
-            return make_response({"message": "User not found"}, 404)
-
-
-api.add_resource(User_By_Id, "/users/<int:id>")
-
-
 class CartItems(Resource):
     def post(self, product_id):
         if not session.get("user_id"):
@@ -341,6 +303,64 @@ def login():
 def logout():
     session.clear()
     return jsonify(message="Logout successful"), 200
+
+
+@app.route("/api/user", methods=["GET", "PATCH", "DELETE"])
+def user_profile():
+    if request.method == "GET":
+        user_id = session.get("user_id")
+        if user_id:
+            user = User.query.get(user_id)
+            if user:
+                return jsonify(user.to_dict()), 200
+        return jsonify({"message": "Not logged in"}), 401
+
+    if request.method == "PATCH":
+        user_id = session.get("user_id")
+        if not user_id:
+            return jsonify({"message": "Not logged in"}), 401
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({"message": "User not found"}), 404
+        data = request.json
+        if "address" in data:
+            user.address = data["address"]
+        if "payment_card" in data:
+            user.payment_card = data["payment_card"]
+        try:
+            db.session.commit()
+            return jsonify({"message": "Profile updated successfully"}), 200
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({"message": "Error updating profile", "error": str(e)}), 500
+
+    if request.method == "DELETE":
+        user_id = session.get("user_id")
+        if not user_id:
+            return jsonify({"message": "Not logged in"}), 401
+
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({"message": "User not found"}), 404
+
+        try:
+            CartItem.query.filter_by(user_id=user_id).delete()
+            Review.query.filter_by(user_id=user_id).delete()
+            OrderHistory.query.filter_by(user_id=user_id).delete()
+            db.session.delete(user)
+            db.session.commit()
+            return (
+                jsonify(
+                    {"message": "User account and associated data deleted successfully"}
+                ),
+                200,
+            )
+        except Exception as e:
+            db.session.rollback()
+            return (
+                jsonify({"message": "Error deleting user account", "error": str(e)}),
+                500,
+            )
 
 
 class CheckSession(Resource):

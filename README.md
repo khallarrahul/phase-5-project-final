@@ -25,7 +25,7 @@ Welcome to the Online Shopping Web Application! This application allows users to
 # Technologies Used
 
   Frontend
-- React: A JavaScript library for building user interfaces.
+-  HTML,CSS, Javascript and ReactJS are used to create the UI.
 - React Router DOM: A routing library for React.
 - FontAwesome: A library for adding icons to the application.
 - Axios: A library for making HTTP requests from the frontend.
@@ -45,5 +45,25 @@ Before you begin, ensure you have the following prerequisites:
 
 # Getting Started
 Clone the Repository: Clone this repository to your local machine.
-```git clone <repository_url>```
-```cd phase-5-project-final```
+- ```git clone <repository_url>```
+- ```cd phase-5-project-final/```
+
+Install Dependencies for frontend and start frontend
+- ```cd client/```
+- ```npm install```
+- ```npm start```
+
+Install dependencies for backend and start backend
+- ```cd server/```
+- ```pipenv install```
+- ```flask run```
+
+** You might have to run this command in case 'flask run' does not work for you in one go.
+- ```export FLASK_APP=config.py```
+
+Access the Application:
+- Open your web browser and navigate to http://localhost:4000 to access the application.
+
+Explore and Use the Application:
+- You can now explore products, add reviews, manage your profile, and enjoy the shopping experience!
+

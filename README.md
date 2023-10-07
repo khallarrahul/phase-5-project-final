@@ -29,3 +29,21 @@ Welcome to the Online Shopping Web Application! This application allows users to
 - React Router DOM: A routing library for React.
 - FontAwesome: A library for adding icons to the application.
 - Axios: A library for making HTTP requests from the frontend.
+
+  Backend
+- Python: The programming language used for the backend.
+- Bcrypt: A library for hashing passwords securely.
+- Flask: A micro web framework for Python.
+- Flask SQLAlchemy: An extension for Flask that simplifies database operations.
+- SQLite: The default database system used by Flask SQLAlchemy.
+
+# Prerequisites
+Before you begin, ensure you have the following prerequisites:
+- npm: Install npm on your machine.
+- Python: Install Python on your machine.
+- SQLite or Another Database: Set up and configure SQLite or another database system for the backend.
+
+# Getting Started
+Clone the Repository: Clone this repository to your local machine.
+```git clone <repository_url>```
+```cd phase-5-project-final```

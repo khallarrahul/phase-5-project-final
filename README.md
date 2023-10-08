@@ -67,6 +67,11 @@ Access the Application:
 Explore and Use the Application:
 - You can now explore products, add reviews, manage your profile, and enjoy the shopping experience!
 
+
+## Non technical walkthrough video
+Check video here: https://www.loom.com/share/97bca2c5f86e45c3bff045e9e673d3f4?sid=eb24334f-b5e1-4770-92b3-3ebb63b7026e
+
+
 ## License
 
 This project is licensed under MIT license. Copyright (c) 2012-2023 Scott Chacon and others

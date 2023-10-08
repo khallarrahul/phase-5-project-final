@@ -1,7 +1,7 @@
-from config import app, db  # Import your SQLAlchemy database instance
-from models import Product  # Import your Product model
+from config import app, db 
+from models import Product 
 
-# Define the data
+
 data = {
     "products": [
         {
@@ -558,7 +558,7 @@ data = {
 }
 
 
-# Function to seed the data
+
 def seed_data():
     with app.app_context():
         for product_data in data["products"]:
@@ -573,7 +573,7 @@ def seed_data():
                 category=product_data["category"],
                 image=product_data[
                     "thumbnail"
-                ],  # You can use thumbnail as the image URL
+                ], 
                 rating=product_data["rating"],
             )
             db.session.add(product)

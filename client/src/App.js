@@ -93,9 +93,6 @@ function App() {
           <h1>ERROR 404</h1>
         </Route>
       </Switch>
-      {/* <footer className="footer">
-        <Footer/>
-      </footer> */}
     </div>
   );
 }

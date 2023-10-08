@@ -1,11 +1,11 @@
-/* CSS for a sticky footer */
+
 #content-wrapper {
-  min-height: 100vh; /* Ensure the content wrapper takes up at least the full viewport height */
-  padding-bottom: 100px; /* Reserve space for the footer at the bottom */
+  min-height: 100vh; 
+  padding-bottom: 100px;
 }
 
 .footer {
-   /* Position the footer as fixed to the bottom */
+
   bottom: 0;
-  width: 100%; /* Make the footer span the entire width of the viewport */
+  width: 100%; 
 }

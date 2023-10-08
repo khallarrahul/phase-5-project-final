@@ -24,7 +24,7 @@ function NavBar({ user, onLogout, onSearch }) {
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container">
         <NavLink className="navbar-brand" to="/">
-          <b>SELL-IT-LIKE-PRO</b>
+          <b>Amazify.com</b>
         </NavLink>
         <button
           className={`navbar-toggler`}

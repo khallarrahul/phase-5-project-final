@@ -1,11 +1,11 @@
-/* Add this to your CSS file */
+
 .signup-form {
-    max-height: calc(100vh - 100px); /* Adjust the value as needed based on your navbar height and header height */
+    max-height: calc(100vh - 100px); 
     overflow-y: auto;
-    padding: 20px; /* Optional: Add padding for better styling */
+    padding: 20px; 
   }
   .error-message {
-    color: red; /* Set the error message text color to red */
-    font-size: 14px; /* Adjust the font size as needed */
-    margin-top: 5px; /* Add some margin for spacing */
+    color: red;
+    font-size: 14px;
+    margin-top: 5px; 
   }

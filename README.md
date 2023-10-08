@@ -1,6 +1,6 @@
 # phase-5-project-final
 
-## The E-Commerce Full-stack App
+## Amazify.com - An E-Commerce Full-stack App
 
 Welcome to the Online Shopping Web Application! This application allows users to browse, shop for products, manage their user profiles, interact with product reviews and more. It's built using React for the frontend and flask-sqlalchemy for the backend.
 

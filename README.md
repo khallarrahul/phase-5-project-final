@@ -25,7 +25,7 @@ Welcome to the Online Shopping Web Application! This application allows users to
 # Technologies Used
 
   Frontend
--  HTML,CSS, Javascript and ReactJS are used to create the UI.
+- HTML,CSS, Javascript, ReactJS and Bootstrap component library are used to create the UI.
 - React Router DOM: A routing library for React.
 - FontAwesome: A library for adding icons to the application.
 - Axios: A library for making HTTP requests from the frontend.
